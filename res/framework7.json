@@ -1,0 +1,28 @@
+{
+  "cwd": "C:\\apps\\reactjs\\ai.inboxgroup.jobtrac.mobile.android",
+  "type": [
+    "capacitor",
+    "pwa",
+    "web"
+  ],
+  "name": "JobTrac",
+  "framework": "react",
+  "template": "single-view",
+  "bundler": "vite",
+  "cssPreProcessor": "scss",
+  "theming": {
+    "customColor": true,
+    "color": "#000380",
+    "darkTheme": false,
+    "iconFonts": true,
+    "fillBars": true
+  },
+  "customBuild": false,
+  "pkg": "io.framework7.myapp",
+  "capacitor": {
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}

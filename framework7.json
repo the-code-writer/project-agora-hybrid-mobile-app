@@ -1,0 +1,28 @@
+{
+  "cwd": "c:\\apps\\f7",
+  "type": [
+    "capacitor",
+    "pwa",
+    "web"
+  ],
+  "name": "V.A.I.D.A",
+  "framework": "react",
+  "template": "tabs",
+  "bundler": "vite",
+  "cssPreProcessor": "scss",
+  "theming": {
+    "customColor": true,
+    "color": "#00b08c",
+    "darkTheme": false,
+    "iconFonts": true,
+    "fillBars": false
+  },
+  "customBuild": false,
+  "pkg": "io.dovellous.vaida",
+  "capacitor": {
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}

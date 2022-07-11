@@ -1,0 +1,68 @@
+{
+  "name": "dovellous-framework7-helper",
+  "version": "1.0.0",
+  "description": "Full featured library for Framework7 for building iOS & Android apps",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./index.ts"
+      ]
+    }
+  },
+  "sideEffects": [
+    "*.less",
+    "*.css",
+    "shared/dom7.js"
+  ],
+  "scripts": {
+    "postinstall": "node postinstall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dovellous/framework7-helper.git"
+  },
+  "keywords": [
+    "dovellous",
+    "mobile",
+    "framework",
+    "framework7",
+    "cordova",
+    "ios",
+    "iphone",
+    "ipad",
+    "apple",
+    "phonegap",
+    "capacitor",
+    "native",
+    "touch",
+    "appstore",
+    "app",
+    "f7",
+    "material",
+    "android",
+    "google",
+    "googleplay"
+  ],
+  "author": "Douglas Maposa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dovellous/framework7-helper/issues"
+  },
+  "homepage": "https://dovellous.com/",
+  "funding": {
+    "type": "patreon",
+    "url": "https://www.patreon.com/dovellous"
+  },
+  "dependencies": {
+    "framework7": "^4.0.4",
+    "jsEncrypt": "^3.1.0",
+    "Crypto-js": "^6.2.0",
+    "@capacitor/cli": "^3.6.0",
+    "@capacitor/core": "^3.6.0",
+    "@capacitor/device": "^1.1.2"
+  }
+}
