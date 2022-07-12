@@ -12,9 +12,10 @@ import {
     BlockFooter, Block, Button, f7ready,
 } from 'framework7-react';
 
+import loginScreenLogo from "../assets/img/logo-rectangle.png"
 import Dom7 from "dom7";
 
-const LoginScreen = ({loginScreenLogo}) => {
+const LoginPage = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -33,6 +34,7 @@ const LoginScreen = ({loginScreenLogo}) => {
         {
             title: "Google",
             icon: "logo_google",
+            image: "assets/png/logos/google.png",
             provider: "GOOGLE",
             id: "google",
             domain: "google.com",
@@ -41,6 +43,7 @@ const LoginScreen = ({loginScreenLogo}) => {
         {
             title: "Facebook",
             icon: "logo_facebook",
+            image: "assets/png/logos/facebook.png",
             provider: "FACEBOOK",
             id: "facebook",
             domain: "facebook.com",
@@ -49,6 +52,7 @@ const LoginScreen = ({loginScreenLogo}) => {
         {
             title: "Twitter",
             icon: "logo_twitter",
+            image: "assets/png/logos/twitter.png",
             provider: "TWITTER",
             id: "twitter",
             domain: "twitter.com",
@@ -57,6 +61,7 @@ const LoginScreen = ({loginScreenLogo}) => {
         {
             title: "Microsoft",
             icon: "logo_windows",
+            image: "assets/png/logos/microsoft.png",
             provider: "MICROSOFT",
             id: "microsoft",
             domain: "microsoft.com",
@@ -65,12 +70,20 @@ const LoginScreen = ({loginScreenLogo}) => {
         {
             title: "Apple",
             icon: "logo_apple",
+            image: "assets/png/logos/apple.png",
             provider: "APPLE",
             id: "apple",
             domain: "apple.com",
             color: "#121212"
         },
     ];
+
+    const resetPIN = () => {
+
+        // @ts-ignore
+        f7.changeUserPIN();
+
+    }
 
     const onRememberMe = (e: { target: { value: any; checked: any; }; }) => {
         setRememberMe([e.target.value, e.target.checked]);
@@ -114,7 +127,7 @@ const LoginScreen = ({loginScreenLogo}) => {
                 message: "Please enter your PIN",
                 shakeEl: "pin"
             },  false);
-            createSheet();
+            renderLoginKeyPad();
             return;
         }
 
@@ -127,63 +140,11 @@ const LoginScreen = ({loginScreenLogo}) => {
                 message: pinMessage,
                 shakeEl: "pin"
             },  false);
-            createSheet();
+            renderLoginKeyPad();
             return;
         }
 
         setIsLoading(true);
-
-        f7.dovellous.request.api.oauth.loginUser(
-            (result)=>{
-
-                if (result.status === "ok"){
-
-                    if ("user" in result) {
-
-                        // @ts-ignore
-                        if (pinModalMini.current !== null){
-                            // @ts-ignore
-                            pinModalMini.current.setValue("");
-                        }
-
-                        setIsLoading(false);
-
-                        setUserEnteredPIN([]);
-
-                        Dom7("#invalid-pin,.invalid-pin").hide();
-
-                        f7.sheet.close('#numpad-mini-sheet-modal');
-
-                        console.log("CORRECT PIN", result.user);
-
-                        if (rememberMe[1]){
-
-                            console.log("REMEMBER ME", result.user);
-
-                        }
-
-                        f7.emit('AUTH_LOGGED_IN_USER', result.user);
-
-                        f7.loggedInUser(result.user);
-
-                    } else {
-
-                        signInError(result,  false);
-
-                    }
-
-                }else{
-
-                    signInError(result,  false);
-
-                }
-
-            },
-            (error)=>{
-
-                signInError(error,  true);
-
-            });
 
         f7.request.post('https://communicator.hyperefficient2.net/react/login_user', { username: username, pin: password, rememberMe: rememberMe })
             .then(function (res) {
@@ -204,7 +165,7 @@ const LoginScreen = ({loginScreenLogo}) => {
 
                         setUserEnteredPIN([]);
 
-                        Dom7("#invalid-pin,.invalid-pin").hide();
+                        Dom7(".error-message").hide();
 
                         f7.sheet.close('#numpad-mini-sheet-modal');
 
@@ -216,9 +177,7 @@ const LoginScreen = ({loginScreenLogo}) => {
 
                         }
 
-                        f7.emit('AUTH_LOGGED_IN_USER', result.user);
-
-                        f7.loggedInUser(result.user);
+                        f7.emit(`AUTH_LOGGED_IN_USER`, result.user);
 
                     } else {
 
@@ -301,7 +260,7 @@ const LoginScreen = ({loginScreenLogo}) => {
 
     }
 
-    const createSheet = () => {
+    const renderLoginKeyPad = () => {
         // Create sheet modal
         if (!sheet.current) {
             // @ts-ignore
@@ -416,7 +375,7 @@ const LoginScreen = ({loginScreenLogo}) => {
                         <br/>
                         <span className={"red-text d-none error-message"}>{loginErrorMessage}</span>
                     </div>
-                    <Row key={'pin-wrapper-key'} className={"pin-wrapper"} onClick={() => { createSheet();  }}>
+                    <Row key={'pin-wrapper-key'} className={"pin-wrapper"} onClick={() => { renderLoginKeyPad();  }}>
                         <Col key={'pin-wrapper-col-1'}>
                             <div className="display-flex justify-content-center align-items-center pin-input" >
                                 {userEnteredPIN.length>0 && (
@@ -522,4 +481,4 @@ const LoginScreen = ({loginScreenLogo}) => {
     );
 }
 
-export default LoginScreen;
+export default LoginPage;

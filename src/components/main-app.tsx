@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {getDevice} from 'framework7/lite-bundle';
 import {
     f7,
@@ -26,19 +26,21 @@ import {
 
 import Dom7 from "dom7";
 
-import capacitorApp from '../../assets/js/capacitor-app';
+import capacitorApp from '../assets/js/capacitor-app';
 import routes from '../assets/js/routes';
 import store from '../assets/js/store';
 
-const MainApp = () => {
+const MyApp = () => {
 
     let [authPIN, setAuthPIN] = useState('____');
 
-    let [loginPIN, setLoginPIN] = useState('');
+    let [userData, setUserData] = useState({});
 
     const validAuthPIN = useState('1234');
 
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    let isUserLoggedIn = false;
 
     let validateAuthPINMode = true;
     let updateAuthPIN1 = "";
@@ -127,22 +129,6 @@ const MainApp = () => {
 
     }
 
-    const loggedInUser = (user) => {
-
-        setIsLoggedIn(true);
-
-        if ("id" in user){
-
-            console.log("::LOGGED_IN_USER::",user);
-
-        }else{
-
-            console.log("::FAKE LOGGED_IN_USER::",user);
-
-        }
-
-    }
-
     const logOut = () => {
         f7.dialog.confirm(
             "Are you sure you want to logout?",
@@ -165,7 +151,6 @@ const MainApp = () => {
                 */
             });
     }
-
 
     const initPINModal = () => {
 
@@ -218,88 +203,93 @@ const MainApp = () => {
 
     }
 
-    f7ready(() => {
+    const AppMainView = ({userData, isLoggedInUser}) => {
 
-        console.log("ENVVVVVVVVVVVVVVVVV", process.env);
+        {/* Your main view, should have "view-main" class */}
 
-        // Init capacitor APIs (see capacitor-app.js)
-        if (f7.device.capacitor) {
-            capacitorApp.init(f7);
+        if (isLoggedInUser && userData.hasOwnProperty("username")){
+
+            return <React.Fragment>
+                <View main className="safe-areas" url="/" id="f7-view-main"/>
+            </React.Fragment>
+
         }
-        // Call F7 APIs here
 
-        f7.authorizePIN = authorizePIN;
+        return <React.Fragment>
+                <View main className="safe-areas" url="/login/" id="f7-view-login"/>
+            </React.Fragment>
 
-        f7.changeUserPIN = changeUserPIN;
+    }
 
-        f7.loggedInUser = loggedInUser;
+    useEffect(() => {
 
-        f7.on("AUTH_LOGGED_IN_USER", function (user) {
+        f7ready((F7Component) => {
 
-            setIsLoggedIn(true);
+            console.warn("F7 COMPONENT READY");
 
-            if ("id" in user){
-
-                console.log("::AUTH LOGGED_IN_USER::",user);
-
-            }else{
-
-                console.log("::AUTH FAKE LOGGED_IN_USER::",user);
-
+            // Init capacitor APIs (see capacitor-app.js)
+            if (f7.device.capacitor) {
+                capacitorApp.init(f7);
             }
+            // Call F7 APIs here
+
+            F7Component.authorizePIN = authorizePIN;
+
+            F7Component.changeUserPIN = changeUserPIN;
+
+            F7Component.on("AUTH_LOGGED_IN_USER", function (user) {
+
+                if ("id" in user){
+
+                    setIsLoggedIn(true);
+                    setUserData(user);
+                    console.log(":: AUTH LOGGED_IN_USER ::",isLoggedIn,user);
+
+                }else{
+
+                    console.log(":: AUTH FAKE LOGGED_IN_USER ::",isLoggedIn,user);
+
+                }
+
+            })
+
+            F7Component.on("AUTH_LOGGED_OUT_USER", function (data) {
+
+                setIsLoggedIn(false);
+                setUserData({});
+                console.log(":: AUTH_LOGGED_OUT_USER ::1", isLoggedIn,data);
+
+            })
+
+            F7Component.on("OPEN_USER_PIN_KEYPAD", function (e) {
+
+                console.log("EVENT: OPEN_USER_PIN_KEYPAD", e);
+
+                Dom7("#numpad-mini").show();
+
+            })
+
+            F7Component.on("OPEN_PIN_MODAL", function (e) {
+
+                console.log("EVENT: OPEN_PIN_MODAL", e);
+
+                f7.popup.open(".popup-pin-authentication");
+
+            })
+
+            F7Component.on("CLOSE_PIN_MODAL", function (e) {
+
+                console.log("EVENT: CLOSE_PIN_MODAL", e);
+
+                f7.popup.close(".popup-pin-authentication");
+
+            })
+
+            initPINModal();
 
         })
 
-        f7.on("AUTH_LOGGED_OUT_USER", function (data) {
-
-            setIsLoggedIn(false);
-
-            console.log("::AUTH_LOGGED_OUT_USER::1",isLoggedIn);
-
-            setTimeout(()=>{
-
-                console.log("::AUTH_LOGGED_OUT_USER::2",isLoggedIn);
-
-            },5000);
-
-        })
-
-        f7.on("LOGIN_USER", function (data) {
-
-            setIsLoggedIn(true);
-
-            Dom7("#view-login").hide();
-            Dom7("#view-main").show();
-
-        })
-
-        f7.on("OPEN_USER_PIN_KEYPAD", function (e) {
-
-            console.log("EVENT: OPEN_USER_PIN_KEYPAD", e);
-
-            Dom7("#numpad-mini").show();
-
-        })
-
-        f7.on("OPEN_PIN_MODAL", function (e) {
-
-            console.log("EVENT: OPEN_PIN_MODAL", e);
-
-            f7.popup.open(".popup-pin-authentication");
-
-        })
-
-        f7.on("CLOSE_PIN_MODAL", function (e) {
-
-            console.log("EVENT: CLOSE_PIN_MODAL", e);
-
-            f7.popup.close(".popup-pin-authentication");
-
-        })
-
-        initPINModal();
-
-    });
+    }, []);
 
     return (
         <App {...f7params} >
@@ -326,13 +316,8 @@ const MainApp = () => {
             </Panel>
 
 
-            {/* Your main view, should have "view-main" class */}
-
-            {isLoggedIn ? (
-                <View className="safe-areas" url="/" id="f7-view-main"/>
-            ) : (
-                <View main className="safe-areas" url="/login/" id="f7-view-login"/>
-            )}
+            {/* Main View */}
+            <AppMainView userData={userData} isLoggedInUser={isLoggedIn} />
 
             {/* Popup */}
 
@@ -367,4 +352,4 @@ const MainApp = () => {
         </App>
     )
 }
-export default MainApp;
+export default MyApp;
