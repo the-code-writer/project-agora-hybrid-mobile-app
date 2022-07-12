@@ -220,6 +220,8 @@ const MainApp = () => {
 
     f7ready(() => {
 
+        console.log("ENVVVVVVVVVVVVVVVVV", process.env);
+
         // Init capacitor APIs (see capacitor-app.js)
         if (f7.device.capacitor) {
             capacitorApp.init(f7);
