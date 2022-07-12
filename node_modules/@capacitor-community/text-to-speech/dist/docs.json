@@ -1,0 +1,194 @@
+{
+  "api": {
+    "name": "TextToSpeechPlugin",
+    "slug": "texttospeechplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "speak",
+        "signature": "(options: TTSOptions) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "TTSOptions"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "Starts the TTS engine and plays the desired text.",
+        "complexTypes": [
+          "TTSOptions"
+        ],
+        "slug": "speak"
+      },
+      {
+        "name": "stop",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "Stops the TTS engine.",
+        "complexTypes": [],
+        "slug": "stop"
+      },
+      {
+        "name": "getSupportedLanguages",
+        "signature": "() => Promise<{ languages: string[]; }>",
+        "parameters": [],
+        "returns": "Promise<{ languages: string[]; }>",
+        "tags": [],
+        "docs": "Returns a list of supported BCP 47 language tags.",
+        "complexTypes": [],
+        "slug": "getsupportedlanguages"
+      },
+      {
+        "name": "getSupportedVoices",
+        "signature": "() => Promise<{ voices: SpeechSynthesisVoice[]; }>",
+        "parameters": [],
+        "returns": "Promise<{ voices: SpeechSynthesisVoice[]; }>",
+        "tags": [],
+        "docs": "Returns a list of supported voices.",
+        "complexTypes": [
+          "SpeechSynthesisVoice"
+        ],
+        "slug": "getsupportedvoices"
+      },
+      {
+        "name": "isLanguageSupported",
+        "signature": "(options: { lang: string; }) => Promise<{ supported: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ lang: string; }"
+          }
+        ],
+        "returns": "Promise<{ supported: boolean; }>",
+        "tags": [],
+        "docs": "Checks if a specific BCP 47 language tag is supported.",
+        "complexTypes": [],
+        "slug": "islanguagesupported"
+      },
+      {
+        "name": "openInstall",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "Verifies proper installation and availability of resource files on the system.\n\nOnly available for Android.",
+        "complexTypes": [],
+        "slug": "openinstall"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "TTSOptions",
+      "slug": "ttsoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "text",
+          "tags": [],
+          "docs": "The text that will be synthesised when the utterance is spoken.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "lang",
+          "tags": [],
+          "docs": "The language of the utterance.\nPossible languages can be queried using `getSupportedLanguages`.\n\nDefault: `en-US`.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "rate",
+          "tags": [],
+          "docs": "The speed at which the utterance will be spoken at.\n\nDefault: `1.0`.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "pitch",
+          "tags": [],
+          "docs": "The pitch at which the utterance will be spoken at.\n\nDefault: `1.0`.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "volume",
+          "tags": [],
+          "docs": "The volume that the utterance will be spoken at.\n\nDefault: `1.0`.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "voice",
+          "tags": [],
+          "docs": "The index of the selected voice that will be used to speak the utterance.\nPossible voices can be queried using `getSupportedVoices`.\n\nOnly available for Web.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "category",
+          "tags": [],
+          "docs": "Select the iOS Audio session category.\nPossible values: `ambient` and `playback`.\nUse `playback` to play audio even when the app is in the background.\n\nOnly available for iOS.\n\nDefault: `ambient`.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "SpeechSynthesisVoice",
+      "slug": "speechsynthesisvoice",
+      "docs": "The SpeechSynthesisVoice interface represents a voice that the system supports.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "default",
+          "tags": [],
+          "docs": "Specifies whether the voice is the default voice for the current app (`true`) or not (`false`).",
+          "complexTypes": [],
+          "type": "boolean"
+        },
+        {
+          "name": "lang",
+          "tags": [],
+          "docs": "BCP 47 language tag indicating the language of the voice.\nExample: `en-US`.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "localService",
+          "tags": [],
+          "docs": "Specifies whether the voice is supplied by a local (`true`) or remote (`false`) speech synthesizer service.",
+          "complexTypes": [],
+          "type": "boolean"
+        },
+        {
+          "name": "name",
+          "tags": [],
+          "docs": "Human-readable name that represents the voice.\nExample: `Microsoft Zira Desktop - English (United States)`.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "voiceURI",
+          "tags": [],
+          "docs": "Type of URI and location of the speech synthesis service for this voice.\nExample: `urn:moz-tts:sapi:Microsoft Zira Desktop - English (United States)?en-US`.",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "enums": [],
+  "typeAliases": [],
+  "pluginConfigs": []
+}
