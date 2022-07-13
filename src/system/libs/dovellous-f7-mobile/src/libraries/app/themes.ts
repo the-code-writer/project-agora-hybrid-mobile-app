@@ -1,17 +1,17 @@
 
-import themeLight from '../../../assets/css/themes/light.css';
-import themeDark from '../../../assets/css/themes/dark.css';
-import themeRed from '../../../assets/css/themes/red.css';
-import themeTurquoise from '../../../assets/css/themes/turquoise.css';
-import themePurple from '../../../assets/css/themes/purple.css';
-import themeOrange from '../../../assets/css/themes/orange.css';
+import themeLight from '../../../assets/styles/themes/light.css';
+import themeDark from '../../../assets/styles/themes/dark.css';
+import themeRed from '../../../assets/styles/themes/red.css';
+import themeTurquoise from '../../../assets/styles/themes/turquoise.css';
+import themePurple from '../../../assets/styles/themes/purple.css';
+import themeOrange from '../../../assets/styles/themes/orange.css';
 
-import themeLightFill from '../../../assets/css/themes/light-fill.css';
-import themeDarkFill from '../../../assets/css/themes/dark-fill.css';
-import themeRedFill from '../../../assets/css/themes/red-fill.css';
-import themeTurquoiseFill from '../../../assets/css/themes/turquoise-fill.css';
-import themePurpleFill from '../../../assets/css/themes/purple-fill.css';
-import themeOrangeFill from '../../../assets/css/themes/orange-fill.css';
+import themeLightFill from '../../../assets/styles/themes/light-fill.css';
+import themeDarkFill from '../../../assets/styles/themes/dark-fill.css';
+import themeRedFill from '../../../assets/styles/themes/red-fill.css';
+import themeTurquoiseFill from '../../../assets/styles/themes/turquoise-fill.css';
+import themePurpleFill from '../../../assets/styles/themes/purple-fill.css';
+import themeOrangeFill from '../../../assets/styles/themes/orange-fill.css';
 
 const AppThemes = {
 

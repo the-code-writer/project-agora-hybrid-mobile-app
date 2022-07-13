@@ -48,6 +48,7 @@
     "capacitor-plugin-filedownload": "^1.0.3",
     "capacitor-rate-app": "^2.0.0",
     "capacitor-secure-storage-plugin": "^0.7.1",
+    "copy-and-watch": "^0.1.6",
     "cordova": "^11.0.0",
     "create-react-app": "^5.0.1",
     "cross-env": "^7.0.3",
@@ -100,7 +101,8 @@
     "build": "cross-env NODE_ENV=production vite build && npx workbox generateSW workbox-config.js",
     "build-capacitor-ios": "cross-env NODE_ENV=production vite build && npx cap copy ios",
     "build-capacitor-android": "cross-env NODE_ENV=production vite build && npx cap copy android",
-    "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./src/Assets/Fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./src/Assets/Fonts/"
+    "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./src/Assets/Fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./src/Assets/Fonts/",
+    "watch": "copy-and-watch --watch src/system/libs/dovellous-f7-mobile/src/**/*.{html,json,png,jpg,svg,ts,tsx,js,jsx,html} src/system/libs/dovellous-f7-mobile/src/**/*. ../project-f7-mobile/src"
   },
   "browserslist": {
     "production": [

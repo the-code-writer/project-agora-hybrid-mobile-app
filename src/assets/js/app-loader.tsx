@@ -12,7 +12,7 @@ import Framework7 from 'framework7/lite-bundle';
 import Framework7React from 'framework7-react';
 
 import Framework7Keypad from 'framework7-plugin-keypad';
-import 'framework7-plugin-keypad/framework7-keypad.css';
+import 'framework7-plugin-keypad/css';
 
 // Import Framework7 Styles
 import 'framework7/css/bundle';
@@ -22,9 +22,10 @@ import '../css/icons.css';
 import '../css/app.scss';
 import '../css/styles.scss';
 
+import Framework7DovellousPlugin from '../../system/libs/dovellous-f7-mobile';
+
 // Import App Component
 import MainApp from '../../components/main-app.jsx';
-import Framework7DovellousPlugin from '../../system/libs/dovellous';
 
 // Init F7 React Plugin
 Framework7.use(Framework7React)

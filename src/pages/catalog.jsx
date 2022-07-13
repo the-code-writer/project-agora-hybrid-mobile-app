@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page, Navbar, List, ListItem, Block, Button, useStore } from 'framework7-react';
-import store from '../js/store'
+import store from '../assets/js/store'
 
 const CatalogPage = () => {
   const products = useStore('products');

@@ -1,14 +1,14 @@
 
-import HomePage from '../pages/home.jsx';
-import AboutPage from '../pages/about.jsx';
-import FormPage from '../pages/form.jsx';
-import CatalogPage from '../pages/catalog.jsx';
-import ProductPage from '../pages/product.jsx';
-import SettingsPage from '../pages/settings.jsx';
+import HomePage from '../../pages/home/';
+import AboutPage from '../../pages/common/about';
+import FormPage from '../../pages/form.jsx';
+import CatalogPage from '../../pages/catalog.jsx';
+import ProductPage from '../../pages/product.jsx';
+import SettingsPage from '../../pages/settings.jsx';
 
-import DynamicRoutePage from '../pages/dynamic-route.jsx';
-import RequestAndLoad from '../pages/request-and-load.jsx';
-import NotFoundPage from '../pages/404.jsx';
+import DynamicRoutePage from '../../pages/dynamic-route.jsx';
+import RequestAndLoad from '../../pages/request-and-load.jsx';
+import NotFoundPage from '../../pages/404.jsx';
 
 var routes = [
   {

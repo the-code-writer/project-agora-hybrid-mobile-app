@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "..\\project-f7-mobile"
 		}
 	],
 	"settings": {}
