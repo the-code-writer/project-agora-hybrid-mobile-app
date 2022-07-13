@@ -25,7 +25,7 @@ let authEvents: any,
     socketEvents: any, 
     blockchainEvents = new Framework7.Events();
 
-const Framework7DovellousLibrary = {
+const DovellousF7Mobile = {
 
     events: {
         auth: authEvents,
@@ -75,4 +75,4 @@ const Framework7DovellousLibrary = {
 
 };
 
-export default Framework7DovellousLibrary;
+export default DovellousF7Mobile;

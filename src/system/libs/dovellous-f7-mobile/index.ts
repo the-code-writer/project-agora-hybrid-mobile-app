@@ -1,8 +1,8 @@
-import Framework7DovellousLibrary from "./framework7-dovellous-library";
+import DovellousF7Mobile from "./dovellous-f7-mobile";
 
 let debugEnabled = true;
 
-const Framework7DovellousPlugin = {
+const DovellousF7MobilePlugin = {
   name: "framework7-dovellous",
   // extend app params with debugger params
   params: {
@@ -19,7 +19,7 @@ const Framework7DovellousPlugin = {
         debugEnabled = false;
       },
     };
-    app.dovellous = Framework7DovellousLibrary;
+    app.dovellous = DovellousF7Mobile;
   },
   on: {
     init: function () {
@@ -48,4 +48,4 @@ const Framework7DovellousPlugin = {
   },
 };
 
-export default Framework7DovellousPlugin;
+export default DovellousF7MobilePlugin;

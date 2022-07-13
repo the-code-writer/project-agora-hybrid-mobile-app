@@ -28,7 +28,9 @@ import Dom7 from "dom7";
 
 import capacitorApp from '../assets/js/capacitor-app';
 import routes from '../assets/js/routes';
-import store from '../assets/js/store';
+
+
+import AppState from "../system/libs/dovellous-f7-mobile/state/app-data";
 
 const MyApp = () => {
 
@@ -58,7 +60,7 @@ const MyApp = () => {
 
         id: 'io.framework7.myapp', // App bundle ID
         // App store
-        store: store,
+        store: AppState,
         // App routes
         routes: routes,
         // Register service worker (only on production build)

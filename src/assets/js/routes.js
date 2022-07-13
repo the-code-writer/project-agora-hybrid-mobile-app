@@ -1,5 +1,6 @@
 
 import HomePage from '../../pages/home/';
+import LoginPage from '../../pages/auth/login';
 import AboutPage from '../../pages/common/about';
 import FormPage from '../../pages/form.jsx';
 import CatalogPage from '../../pages/catalog.jsx';
@@ -16,8 +17,16 @@ var routes = [
     component: HomePage,
   },
   {
-    path: '/about/',
+    path: '/register/',
     component: AboutPage,
+  },
+  {
+    path: '/recover/',
+    component: AboutPage,
+  },
+  {
+    path: '/login/',
+    component: LoginPage,
   },
   {
     path: '/form/',

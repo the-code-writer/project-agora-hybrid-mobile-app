@@ -2,6 +2,16 @@
 
 const Snippets = {
 
+    getJsonDataFromDotNotation: (dataObject: any, key: string) => {
+
+        let keys = key.split(".");
+
+        let value = keys.reduce((a, c) => a[c], dataObject);
+
+        return value;
+
+    },
+
     htmlFormatting: {
 
         /**

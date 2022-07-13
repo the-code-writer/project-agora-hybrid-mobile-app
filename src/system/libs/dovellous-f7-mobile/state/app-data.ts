@@ -6,9 +6,9 @@ import {Storage} from '@capacitor/storage';
 
 import {encryptPublicLong, decryptPrivateLong} from '@lsqswl/rsaencrypt';
 
-import DovellousHelper from '../helper';
+import DovellousF7Mobile from '../dovellous-f7-mobile';
 
-const StateStore = createStore({
+const AppState = createStore({
 
     state: {
 
@@ -160,82 +160,82 @@ const StateStore = createStore({
                 endpoints: {
                     signIn: {
                         path: 'oauth/sign_in',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                     signUp: {
                         path: 'oauth/sign_up',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                     registerUser: {
                         path: 'user/register',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.BASIC,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.BASIC,
                         contentType: 'application/x-www-form-urlencoded',
                         timeout: 0,
                     },
                     getAccessToken: {
                         path: 'user/login',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.BASIC,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.BASIC,
                         contentType: 'application/x-www-form-urlencoded',
                         timeout: 0,
                     },
                     clientRegister: {
                         path: 'device/register',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.NONE,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.NONE,
                         contentType: 'text/json',
                     },
                     clientUpdateFirebaseToken: {
                         path: 'oauth/client_update_firebase_token',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                     accountSendConfirmationCode: {
                         path: 'oauth/account_send_confirmation_code',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                     accountVerifyConfirmationCode: {
                         path: 'oauth/account_verify_confirmation_code',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                     accountUpdatePassword: {
                         path: 'oauth/account_update_password',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                     sendFeedback: {
                         path: 'contacts/send_feedback',
-                        method: DovellousHelper.K.RequestMethods.POST,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.POST,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                     getFeeds: {
                         path: 'feeds',
-                        method: DovellousHelper.K.RequestMethods.GET,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.GET,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                     getBlog: {
                         path: 'blog',
-                        method: DovellousHelper.K.RequestMethods.GET,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.GET,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                     getProducts: {
                         path: 'products',
-                        method: DovellousHelper.K.RequestMethods.GET,
-                        auth: DovellousHelper.K.Oauth.BEARER_TOKEN,
+                        method: DovellousF7Mobile.K.RequestMethods.GET,
+                        auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
                     },
                 },
@@ -251,7 +251,7 @@ const StateStore = createStore({
                             label: false,
                             placeholder: false,
                             inputName: false,
-                            inputType: DovellousHelper.K.Inputs.TOGGLE,
+                            inputType: DovellousF7Mobile.K.Inputs.TOGGLE,
                             iconColor: false,
                             iconOS: {
                                 android: {
@@ -273,37 +273,67 @@ const StateStore = createStore({
 
             ],
 
+            socialAccountsArray: [
+                {
+                    title: "Google",
+                    icon: "logo_google",
+                    image: "assets/png/logos/google.png",
+                    provider: "GOOGLE",
+                    id: "google",
+                    domain: "google.com",
+                    color: "#f44336"
+                },
+                {
+                    title: "Facebook",
+                    icon: "logo_facebook",
+                    image: "assets/png/logos/facebook.png",
+                    provider: "FACEBOOK",
+                    id: "facebook",
+                    domain: "facebook.com",
+                    color: "#3f51b5"
+                },
+                {
+                    title: "Twitter",
+                    icon: "logo_twitter",
+                    image: "assets/png/logos/twitter.png",
+                    provider: "TWITTER",
+                    id: "twitter",
+                    domain: "twitter.com",
+                    color: "#2196f3"
+                },
+                {
+                    title: "Microsoft",
+                    icon: "logo_windows",
+                    image: "assets/png/logos/microsoft.png",
+                    provider: "MICROSOFT",
+                    id: "microsoft",
+                    domain: "microsoft.com",
+                    color: "#03a9f4"
+                },
+                {
+                    title: "Apple",
+                    icon: "logo_apple",
+                    image: "assets/png/logos/apple.png",
+                    provider: "APPLE",
+                    id: "apple",
+                    domain: "apple.com",
+                    color: "#121212"
+                },
+            ]
+
         },
         contacts: [],
         location: {},
 
         /////////////////////////////////////////////
 
-        productsMenu: [],
-
-        products: [],
-
-        /////////////////////////////////////////////
-
-        recentItemsSheetModalList: [],
-        recentItemsSheetModalTitle: "Recent Items",
-        legislationOrderedList: [],
-        legislationUnOrderedList: {},
-        gazettesOrderedList: [],
-        gazettesUnOrderedList: {},
-        covidOrderedList: [],
-        covidUnOrderedList: {},
-        libraryLegislationOrderedList: [],
-        libraryLegislationUnOrderedList: {},
-        libraryGazettesOrderedList: [],
-        libraryGazettesUnOrderedList: {},
-        libraryCovidOrderedList: [],
-        libraryCovidUnOrderedList: {},
-
         ///////////////////////////////////////////
 
     },
     getters: {
+        getPath({state}: any, {key}) {
+            return DovellousF7Mobile.snippets.getJsonDataFromDotNotation(state, key);
+        },
         getloggedIn({state}) {
             return state.loggedIn;
         },
@@ -427,72 +457,9 @@ const StateStore = createStore({
         getAppAPIEndpoints({state}) {
             return state.app.api.endpoints;
         },
-        products({state}) {
-            return state.products;
+        getSocialAccountsArray({state}) {
+            return state.app.socialAccountsArray;
         },
-        productsMenu({state}) {
-            return state.productsMenu;
-        },
-
-        ///////////////////////////////////////////
-
-        recentItemsSheetModalList({state}) {
-            return state.recentItemsSheetModalList;
-        },
-        recentItemsSheetModalTitle({state}) {
-            return state.recentItemsSheetModalTitle;
-        },
-
-        getLegislations({state}) {
-            return Object.keys(state.legislationUnOrderedList).map((key) => [key, state.legislationUnOrderedList[key]]);
-        },
-        getLegislationsOrderedList({state}) {
-            return state.legislationOrderedList;
-        },
-        getLegislationsUnOrderedList({state}) {
-            return this.state.legislationUnOrderedList;
-        },
-        getGazettes({state}) {
-            return Object.keys(state.gazettesUnOrderedList).map((key) => [key, state.gazettesUnOrderedList[key]]);
-        },
-        getGazettesOrderedList({state}) {
-            return state.gazettesOrderedList;
-        },
-        getGazettesUnOrderedList({state}) {
-            return this.state.gazettesUnOrderedList;
-        },
-        getCovidOrderedList({state}) {
-            return state.covidOrderedList;
-        },
-        getCovidUnOrderedList({state}) {
-            return this.state.covidUnOrderedList;
-        },
-
-        getLibraryLegislations({state}) {
-            return Object.keys(state.libraryLegislationUnOrderedList).map((key) => [key, state.libraryLegislationUnOrderedList[key]]);
-        },
-        getLibraryLegislationsOrderedList({state}) {
-            return state.libraryLegislationOrderedList;
-        },
-        getLibraryLegislationsUnOrderedList({state}) {
-            return this.state.libraryLegislationUnOrderedList;
-        },
-        getLibraryGazettes({state}) {
-            return Object.keys(state.libraryGazettesUnOrderedList).map((key) => [key, state.libraryGazettesUnOrderedList[key]]);
-        },
-        getLibraryGazettesOrderedList({state}) {
-            return state.libraryGazettesOrderedList;
-        },
-        getLibraryGazettesUnOrderedList({state}) {
-            return this.state.libraryGazettesUnOrderedList;
-        },
-        getLibraryCovidOrderedList({state}) {
-            return state.libraryCovidOrderedList;
-        },
-        getLibraryCovidUnOrderedList({state}) {
-            return this.state.libraryCovidUnOrderedList;
-        },
-        
         ///////////////////////////////////////////
 
     },
@@ -542,6 +509,55 @@ const StateStore = createStore({
 
         ///////////////////////////////////////////
 
+        saveState({state}, callbackFunction) {
+            helper.data.setKey(
+                'state',
+                state,
+                function (data) {
+                    if(typeof callbackFunction === "function"){
+                        callbackFunction(data);
+                    }
+                }
+            );
+        },
+        restoreState({state}, callbackFunction) {
+            helper.data.getKey(
+                'state',
+                function (data){
+                    state = data;
+                    if(typeof callbackFunction === "function"){
+                        callbackFunction(data);
+                    }
+                }
+            );
+        },
+        setAppData({state, dispatch}, data) {
+            state.securityE2E.keys.publicKeys.server = data;
+            dispatch("saveAppData", data);
+        },
+        saveAppData({state}, callbackFunction) {
+            helper.data.setKey(
+                'state.app',
+                state.app,
+                function (data) {
+                    if(typeof callbackFunction === "function"){
+                        callbackFunction(data);
+                    }
+                }
+            );
+        },
+        restoreAppData({state}, callbackFunction) {
+            helper.data.getKey(
+                'state.app',
+                function (data){
+                    state.app = data;
+                    if(typeof callbackFunction === "function"){
+                        callbackFunction(data);
+                    }
+                }
+            );
+        },
+
         ///////////////////////////////////////////
 
         ///////////////////////////////////////////
@@ -563,42 +579,7 @@ const StateStore = createStore({
             state.recentItemsSheetModalTitle = title;
         },
 
-        updateJudgements({state}, judgements) {
-            state.judgementsUnOrderedList = judgements;
-            state.judgementsOrderedList = Object.keys(judgements).map((key) => [key, judgements[key]]);
-        },
-        updateLegislations({state}, legislations) {
-            state.legislationUnOrderedList = legislations;
-            state.legislationOrderedList = Object.keys(legislations).map((key) => [key, legislations[key]]);
-        },
-        updateGazettes({state}, gazettes) {
-            state.gazettesUnOrderedList = gazettes;
-            state.gazettesOrderedList = Object.keys(gazettes).map((key) => [key, gazettes[key]]);
-        },
-        updateCovid({state}, covid) {
-            state.covidUnOrderedList = covid;
-            state.covidOrderedList = Object.keys(covid).map((key) => [key, covid[key]]);
-        },
-
-        updateLibraryJudgements({state}, judgements) {
-            state.libraryJudgementsUnOrderedList = judgements;
-            state.libraryJudgementsOrderedList = Object.keys(judgements).map((key) => [key, judgements[key]]);
-        },
-        updateLibraryLegislations({state}, legislations) {
-            state.libraryLegislationUnOrderedList = legislations;
-            state.libraryLegislationOrderedList = Object.keys(legislations).map((key) => [key, legislations[key]]);
-        },
-        updateLibraryGazettes({state}, gazettes) {
-            state.libraryGazettesUnOrderedList = gazettes;
-            state.libraryGazettesOrderedList = Object.keys(gazettes).map((key) => [key, gazettes[key]]);
-        },
-        updateLibraryCovid({state}, covid) {
-            state.libraryCovidUnOrderedList = covid;
-            state.libraryCovidOrderedList = Object.keys(covid).map((key) => [key, covid[key]]);
-        },
-
         ///////////////////////////////////////////
-
 
         securityEncrypt: function ({state}, data) {
 
@@ -1291,54 +1272,7 @@ const StateStore = createStore({
                 }
             );
         },
-        saveState({state}, callbackFunction) {
-            helper.data.setKey(
-                'state',
-                state,
-                function (data) {
-                    if(typeof callbackFunction === "function"){
-                        callbackFunction(data);
-                    }
-                }
-            );
-        },
-        restoreState({state}, callbackFunction) {
-            helper.data.getKey(
-                'state',
-                function (data){
-                    state = data;
-                    if(typeof callbackFunction === "function"){
-                        callbackFunction(data);
-                    }
-                }
-            );
-        },
-        setAppData({state, dispatch}, data) {
-            state.securityE2E.keys.publicKeys.server = data;
-            dispatch("saveAppData", data);
-        },
-        saveAppData({state}, callbackFunction) {
-            helper.data.setKey(
-                'state.app',
-                state.app,
-                function (data) {
-                    if(typeof callbackFunction === "function"){
-                        callbackFunction(data);
-                    }
-                }
-            );
-        },
-        restoreAppData({state}, callbackFunction) {
-            helper.data.getKey(
-                'state.app',
-                function (data){
-                    state.app = data;
-                    if(typeof callbackFunction === "function"){
-                        callbackFunction(data);
-                    }
-                }
-            );
-        },
+        
         setAppUI({state}, data) {
             state.app.ui = data;
         },
@@ -1401,6 +1335,10 @@ const StateStore = createStore({
 
         setAppAPIEndpoints({state}, data) {
             state.app.api.endpoints = data;
+        },
+
+        setSocialAccountsArray({state}, data) {
+            state.app.socialAccountsArray = data;
         },
 
         setLoggedIn({state}, data) {
@@ -1597,8 +1535,7 @@ const StateStore = createStore({
                 }
             );
         },
-
     },
 })
 
-export default StateStore;
+export default AppState;

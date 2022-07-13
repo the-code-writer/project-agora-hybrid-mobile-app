@@ -9,10 +9,10 @@ import {
     Checkbox,
     Row,
     Col,
-    BlockFooter, Block, Button, f7ready,
+    BlockFooter, Block, Button, f7ready, useStore
 } from 'framework7-react';
 
-import loginScreenLogo from "../assets/img/logo-rectangle.png"
+import loginScreenLogo from "../../assets/img/logo-rectangle.png"
 import Dom7 from "dom7";
 
 const LoginPage = () => {
@@ -30,53 +30,7 @@ const LoginPage = () => {
 
     const pinModalMini = useRef(null);
 
-    const socialAccountsArray = [
-        {
-            title: "Google",
-            icon: "logo_google",
-            image: "assets/png/logos/google.png",
-            provider: "GOOGLE",
-            id: "google",
-            domain: "google.com",
-            color: "#f44336"
-        },
-        {
-            title: "Facebook",
-            icon: "logo_facebook",
-            image: "assets/png/logos/facebook.png",
-            provider: "FACEBOOK",
-            id: "facebook",
-            domain: "facebook.com",
-            color: "#3f51b5"
-        },
-        {
-            title: "Twitter",
-            icon: "logo_twitter",
-            image: "assets/png/logos/twitter.png",
-            provider: "TWITTER",
-            id: "twitter",
-            domain: "twitter.com",
-            color: "#2196f3"
-        },
-        {
-            title: "Microsoft",
-            icon: "logo_windows",
-            image: "assets/png/logos/microsoft.png",
-            provider: "MICROSOFT",
-            id: "microsoft",
-            domain: "microsoft.com",
-            color: "#03a9f4"
-        },
-        {
-            title: "Apple",
-            icon: "logo_apple",
-            image: "assets/png/logos/apple.png",
-            provider: "APPLE",
-            id: "apple",
-            domain: "apple.com",
-            color: "#121212"
-        },
-    ];
+    const appData = useStore('app');
 
     const resetPIN = () => {
 
@@ -454,7 +408,7 @@ const LoginPage = () => {
                         </div>
                             <div className="list media-list">
                                 <ul>
-                                    {socialAccountsArray.map((item: any, index: number) => (
+                                    {appData.socialAccountsArray.map((item: any, index: number) => (
                                         <li key={`social-media-account-key-${index}`}>
                                             <a href="#" className="item-link item-content"
                                                onClick={(e) => signInViaSocialAccount(item)} >
