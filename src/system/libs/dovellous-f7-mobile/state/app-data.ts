@@ -2,9 +2,9 @@ import Framework7 from 'framework7/bundle';
 
 import {createStore} from 'framework7';
 
-import {Storage} from '@capacitor/storage';
+//import {Storage} from '@capacitor/storage';
 
-import {encryptPublicLong, decryptPrivateLong} from '@lsqswl/rsaencrypt';
+//import {encryptPublicLong, decryptPrivateLong} from '@lsqswl/rsaencrypt';
 
 import DovellousF7Mobile from '../dovellous-f7-mobile';
 
