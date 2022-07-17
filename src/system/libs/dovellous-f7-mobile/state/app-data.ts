@@ -2,17 +2,26 @@ import Framework7 from 'framework7/bundle';
 
 import {createStore} from 'framework7';
 
+
 //import {Storage} from '@capacitor/storage';
 
 //import {encryptPublicLong, decryptPrivateLong} from '@lsqswl/rsaencrypt';
 
-import DovellousF7Mobile from '../dovellous-f7-mobile';
+import * as Dovellous from '../dovellous-f7-mobile';
+
+const dbEndpoints = Dovellous.F7Mobile.data.getJSON("endpoints");
 
 const AppState = createStore({
 
     state: {
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
+
+        authLoginIsLoading: false,
+        authLoginWithPIN: true,
+        authLoginPINLength: 6,
+
+        /* ######## AUTH ######## */
 
         loggedIn: false,
         isSigningIn: false,
@@ -159,7 +168,7 @@ const AppState = createStore({
                 ],
                 endpoints: {
                     signIn: {
-                        path: 'oauth/sign_in',
+                        path: dbEndpoints.resource.getData("/oauth/signin"),
                         method: DovellousF7Mobile.K.RequestMethods.POST,
                         auth: DovellousF7Mobile.K.Oauth.BEARER_TOKEN,
                         contentType: 'text/json',
@@ -322,17 +331,18 @@ const AppState = createStore({
             ]
 
         },
+        languages: dovellousJSONDatabaseLanguages.db.get("."),
         contacts: [],
         location: {},
 
-        /////////////////////////////////////////////
+        /* ######## AUTH ######## *///
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
 
     },
     getters: {
-        getPath({state}: any, {key}) {
-            return DovellousF7Mobile.snippets.getJsonDataFromDotNotation(state, key);
+        authLoginIsLoading({state}) {
+            return state.authLoginIsLoading;
         },
         getloggedIn({state}) {
             return state.loggedIn;
@@ -460,12 +470,12 @@ const AppState = createStore({
         getSocialAccountsArray({state}) {
             return state.app.socialAccountsArray;
         },
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
 
     },
     actions: {
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
 
         initializeState: function ({state, dispatch}) {
 
@@ -507,7 +517,7 @@ const AppState = createStore({
 
         },
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
 
         saveState({state}, callbackFunction) {
             helper.data.setKey(
@@ -558,19 +568,27 @@ const AppState = createStore({
             );
         },
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
 
-        ///////////////////////////////////////////
+        authLoginIsLoading({state}: any, isLoading: any) {
+            state.authLoginIsLoading = isLoading;
+        },
 
-        ///////////////////////////////////////////
+        authLoginPINLength({state}: any, len: number) {
+            state.authLoginPINLength = len;
+        },
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
+
+        /* ######## AUTH ######## */
+
+        /* ######## AUTH ######## */
 
         updateRecentItemsSheetModalList({state}, list) {
             state.recentItemsSheetModalList = list;
@@ -579,7 +597,7 @@ const AppState = createStore({
             state.recentItemsSheetModalTitle = title;
         },
 
-        ///////////////////////////////////////////
+        /* ######## AUTH ######## */
 
         securityEncrypt: function ({state}, data) {
 
