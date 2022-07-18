@@ -1,0 +1,13 @@
+{
+	"appId": "io.dovellous.vongai",
+	"appName": "vong.ai",
+	"bundledWebRuntime": true,
+	"npmClient": "npm",
+	"webDir": "www",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0
+		}
+	},
+	"cordova": {}
+}

@@ -1,7 +1,7 @@
 {
-  "appId": "io.dovellous.vaida",
-  "appName": "V.A.I.D.A",
-  "bundledWebRuntime": false,
+  "appId": "io.dovellous.vongai",
+  "appName": "vong.ai",
+  "bundledWebRuntime": true,
   "npmClient": "npm",
   "webDir": "www",
   "plugins": {

@@ -1,10 +1,10 @@
 {
-  "name": "v.a.i.d.a",
+  "name": "vong.ai",
   "private": true,
   "version": "1.0.0",
-  "description": "V.A.I.D.A",
+  "description": "V.O.N.G.A.I",
   "repository": "",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "keywords": [],
   "dependencies": {
     "@capacitor-community/barcode-scanner": "^2.1.1",
