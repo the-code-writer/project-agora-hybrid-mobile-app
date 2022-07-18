@@ -6,10 +6,8 @@ function renderVirtual(swiper, slides, virtualData) {
     top: `${virtualData.offset}px`
   };
   return slides.filter((child, index) => index >= virtualData.from && index <= virtualData.to).map(child => {
-    const node = child.cloneNode(true);
-    node.swiper = swiper;
-    Object.assign(node.style, style);
-    return node;
+    Object.assign(child.style, style);
+    return child;
   });
 }
 

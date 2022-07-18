@@ -1,15 +1,19 @@
 import { template as _$template } from "solid-js/web";
-import { mergeProps as _$mergeProps } from "solid-js/web";
+import { className as _$className } from "solid-js/web";
+import { effect as _$effect } from "solid-js/web";
 import { createComponent as _$createComponent } from "solid-js/web";
+import { insert as _$insert } from "solid-js/web";
 import { memo as _$memo } from "solid-js/web";
+import { spread as _$spread } from "solid-js/web";
 
-const _tmpl$ = /*#__PURE__*/_$template(`<div class="swiper-button-prev"></div>`, 2),
-      _tmpl$2 = /*#__PURE__*/_$template(`<div class="swiper-button-next"></div>`, 2),
-      _tmpl$3 = /*#__PURE__*/_$template(`<div class="swiper-scrollbar"></div>`, 2),
-      _tmpl$4 = /*#__PURE__*/_$template(`<div class="swiper-pagination"></div>`, 2);
+const _tmpl$ = /*#__PURE__*/_$template(`<div class="swiper-wrapper"></div>`, 2),
+      _tmpl$2 = /*#__PURE__*/_$template(`<div class="swiper-button-prev"></div>`, 2),
+      _tmpl$3 = /*#__PURE__*/_$template(`<div class="swiper-button-next"></div>`, 2),
+      _tmpl$4 = /*#__PURE__*/_$template(`<div class="swiper-scrollbar"></div>`, 2),
+      _tmpl$5 = /*#__PURE__*/_$template(`<div class="swiper-pagination"></div>`, 2),
+      _tmpl$6 = /*#__PURE__*/_$template(`<div></div>`, 2);
 
-import { createEffect, createMemo, createSignal, onCleanup, Show, splitProps } from 'solid-js';
-import { Dynamic } from 'solid-js/web';
+import { createEffect, createMemo, createSignal, onCleanup, onMount, Show, splitProps } from 'solid-js';
 import SwiperCore from 'swiper';
 import { SwiperContext } from './context.js';
 import { getChangedParams } from '../components-shared/get-changed-params.js';
@@ -125,7 +129,7 @@ const Swiper = props => {
     }
   }); // mount swiper
 
-  createEffect(() => {
+  onMount(() => {
     if (local.ref) {
       if (typeof local.ref === 'function') {
         local.ref(swiperElRef);
@@ -149,11 +153,11 @@ const Swiper = props => {
       swiper: swiperRef
     }, params().params);
     if (local.onSwiper) local.onSwiper(swiperRef);
-    onCleanup(() => {
-      if (swiperRef && !swiperRef.destroyed) {
-        swiperRef.destroy(true, false);
-      }
-    });
+  });
+  onCleanup(() => {
+    if (swiperRef && !swiperRef.destroyed) {
+      swiperRef.destroy(true, false);
+    }
   }); // watch for params change
 
   createEffect(() => {
@@ -191,11 +195,7 @@ const Swiper = props => {
     }
 
     if (!params().params.loop || swiperRef && swiperRef.destroyed) {
-      return slides.map(child => {
-        const node = child.cloneNode(true);
-        node.swiper = swiperRef;
-        return node;
-      });
+      return slides;
     }
 
     return renderLoop(swiperRef, slides, params().params);
@@ -205,91 +205,84 @@ const Swiper = props => {
   /* eslint-disable react/no-unknown-property */
 
 
-  return _$createComponent(Dynamic, _$mergeProps({
-    get component() {
-      return local.tag || 'div';
-    },
+  return (() => {
+    const _el$ = _tmpl$6.cloneNode(true);
 
-    ref(r$) {
-      const _ref$ = swiperElRef;
-      typeof _ref$ === "function" ? _ref$(r$) : swiperElRef = r$;
-    },
+    const _ref$ = swiperElRef;
+    typeof _ref$ === "function" ? _ref$(_el$) : swiperElRef = _el$;
 
-    get ["class"]() {
-      return uniqueClasses(`${containerClasses()}${local.class ? ` ${local.class}` : ''}`);
-    }
+    _$spread(_el$, () => params().rest, false, true);
 
-  }, () => params().rest, {
-    get children() {
-      return _$createComponent(SwiperContext.Provider, {
-        value: swiperRef,
+    _$insert(_el$, _$createComponent(SwiperContext.Provider, {
+      value: swiperRef,
 
-        get children() {
-          return [_$memo(() => slots['container-start']), _$createComponent(Dynamic, {
-            get component() {
-              return local.wrapperTag || 'div';
-            },
+      get children() {
+        return [_$memo(() => slots['container-start']), (() => {
+          const _el$2 = _tmpl$.cloneNode(true);
 
-            "class": "swiper-wrapper",
+          _$insert(_el$2, () => slots['wrapper-start'], null);
 
-            get children() {
-              return [_$memo(() => slots['wrapper-start']), _$memo(() => renderSlides()), _$memo(() => slots['wrapper-end'])];
-            }
+          _$insert(_el$2, renderSlides, null);
 
-          }), _$createComponent(Show, {
-            get when() {
-              return needsNavigation(params().params);
-            },
+          _$insert(_el$2, () => slots['wrapper-end'], null);
 
-            get children() {
-              return [(() => {
-                const _el$ = _tmpl$.cloneNode(true);
+          return _el$2;
+        })(), _$createComponent(Show, {
+          get when() {
+            return needsNavigation(params().params);
+          },
 
-                const _ref$2 = prevElRef;
-                typeof _ref$2 === "function" ? _ref$2(_el$) : prevElRef = _el$;
-                return _el$;
-              })(), (() => {
-                const _el$2 = _tmpl$2.cloneNode(true);
+          get children() {
+            return [(() => {
+              const _el$3 = _tmpl$2.cloneNode(true);
 
-                const _ref$3 = nextElRef;
-                typeof _ref$3 === "function" ? _ref$3(_el$2) : nextElRef = _el$2;
-                return _el$2;
-              })()];
-            }
-
-          }), _$createComponent(Show, {
-            get when() {
-              return needsScrollbar(params().params);
-            },
-
-            get children() {
-              const _el$3 = _tmpl$3.cloneNode(true);
-
-              const _ref$4 = scrollbarElRef;
-              typeof _ref$4 === "function" ? _ref$4(_el$3) : scrollbarElRef = _el$3;
+              const _ref$2 = prevElRef;
+              typeof _ref$2 === "function" ? _ref$2(_el$3) : prevElRef = _el$3;
               return _el$3;
-            }
+            })(), (() => {
+              const _el$4 = _tmpl$3.cloneNode(true);
 
-          }), _$createComponent(Show, {
-            get when() {
-              return needsPagination(params().params);
-            },
-
-            get children() {
-              const _el$4 = _tmpl$4.cloneNode(true);
-
-              const _ref$5 = paginationElRef;
-              typeof _ref$5 === "function" ? _ref$5(_el$4) : paginationElRef = _el$4;
+              const _ref$3 = nextElRef;
+              typeof _ref$3 === "function" ? _ref$3(_el$4) : nextElRef = _el$4;
               return _el$4;
-            }
+            })()];
+          }
 
-          }), _$memo(() => slots['container-end'])];
-        }
+        }), _$createComponent(Show, {
+          get when() {
+            return needsScrollbar(params().params);
+          },
 
-      });
-    }
+          get children() {
+            const _el$5 = _tmpl$4.cloneNode(true);
 
-  }));
+            const _ref$4 = scrollbarElRef;
+            typeof _ref$4 === "function" ? _ref$4(_el$5) : scrollbarElRef = _el$5;
+            return _el$5;
+          }
+
+        }), _$createComponent(Show, {
+          get when() {
+            return needsPagination(params().params);
+          },
+
+          get children() {
+            const _el$6 = _tmpl$5.cloneNode(true);
+
+            const _ref$5 = paginationElRef;
+            typeof _ref$5 === "function" ? _ref$5(_el$6) : paginationElRef = _el$6;
+            return _el$6;
+          }
+
+        }), _$memo(() => slots['container-end'])];
+      }
+
+    }));
+
+    _$effect(() => _$className(_el$, uniqueClasses(`${containerClasses()}${local.class ? ` ${local.class}` : ''}`)));
+
+    return _el$;
+  })();
 };
 
 export { Swiper };
