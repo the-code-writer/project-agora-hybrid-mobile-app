@@ -31,7 +31,8 @@ const Konstants = {
     Events: {
         Auth: {
 
-            DEVICE_READY: 'event-app-device-ready',
+            LOGIN_SUCCESS: 'auth_login_success',
+            LOGIN_ERROR: 'auth_login_error',
 
         },
         Notification: {
@@ -60,7 +61,10 @@ const Konstants = {
 
         },
     },
-    APP_URL: 'http://34.122.0.185/zimlii.org',
+    Dots: {
+        white: "Konstants",
+        black: "⚫"
+    }
 };
 
 export default Konstants;

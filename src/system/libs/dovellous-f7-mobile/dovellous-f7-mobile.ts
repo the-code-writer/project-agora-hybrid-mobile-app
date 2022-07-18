@@ -3,6 +3,7 @@
 import Framework7 from 'framework7/lite-bundle';
 
 import CapacitorStorage from './src/libraries/storage/capacitor-storage';
+import JSONService from './src/libraries/storage/json-service';
 import SqliteService from './src/libraries/databases/sqlite-service';
 import Blockchain from './src/libraries/cryptography/blockchain';
 import Encryption from './src/libraries/cryptography/encryption';
@@ -25,7 +26,8 @@ let authEvents: any,
     socketEvents: any, 
     blockchainEvents = new Framework7.Events();
 
-const DovellousF7Mobile = {
+
+const F7Mobile = {
 
     events: {
         auth: authEvents,
@@ -54,10 +56,16 @@ const DovellousF7Mobile = {
     data: {
         storage: {
             cp: CapacitorStorage,
-            storeJS: {},
+            storeJS: {}
         },
         databases: {
-            sqliteService: SqliteService,
+            sqliteService: SqliteService,            
+        },
+        json: JSONService,
+        getJSON: (filename: any) => {
+            const db = JSONService;
+            db.init(filename);
+            return db.resource;
         }
     },
 
@@ -75,4 +83,12 @@ const DovellousF7Mobile = {
 
 };
 
-export default DovellousF7Mobile;
+const LanguageResource = F7Mobile.data.getJSON("languages");
+
+const Languages = {
+    text: (path: any): void=>{
+        LanguageResource.getData(path);
+    }
+};
+
+export {F7Mobile, LanguageResource, Languages};
