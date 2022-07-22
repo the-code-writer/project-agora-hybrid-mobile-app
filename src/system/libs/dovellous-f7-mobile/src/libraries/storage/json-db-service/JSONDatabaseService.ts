@@ -1,22 +1,22 @@
-import CapacitorStorage from "./capacitor-storage";
+import CapacitorStorage from "../capacitor-storage";
 import { KeyValue, merge, removeTrailingChar } from "./lib/Utils";
 import { DatabaseError, DataError } from "./lib/Errors";
 import { DBParentData } from "./lib/DBParentData";
 import { ArrayInfo } from "./lib/ArrayInfo";
-import { Config, JSONServiceDBConfig } from "./lib/JSONServiceDBConfig";
+import { Config, JSONDatabaseServiceConfig } from "./lib/JSONDatabaseServiceConfig";
 
 type DataPath = Array<string>;
 
 export type FindCallback = (entry: any, index: number | string) => boolean;
 
-export class JSONService {
+export class JSONDatabaseService {
   private loaded: boolean = false;
   private data: KeyValue = {};
-  private readonly config: JSONServiceDBConfig;
+  private readonly config: JSONDatabaseServiceConfig;
   private capacitorStorage = new CapacitorStorage();
 
   /**
-   * JSONService Constructor
+   * JSONDatabaseService Constructor
    * @param dbuuid where to save the "DB". Can also be used to give the whole configuration
    * @param autoSave save the database at each push command into the json file
    * @param prettyFormat the JSON file will be readable easily by a human
