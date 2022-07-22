@@ -1,19 +1,18 @@
-import CapacitorStorage from './capacitor-storage';
-import { KeyValue, merge, removeTrailingChar } from './lib/Utils'
-import { DatabaseError, DataError } from './lib/Errors'
-import { DBParentData } from './lib/DBParentData'
-import { ArrayInfo } from './lib/ArrayInfo'
-import { Config, JSONServiceDBConfig } from './lib/JSONServiceDBConfig'
+import CapacitorStorage from "./capacitor-storage";
+import { KeyValue, merge, removeTrailingChar } from "./lib/Utils";
+import { DatabaseError, DataError } from "./lib/Errors";
+import { DBParentData } from "./lib/DBParentData";
+import { ArrayInfo } from "./lib/ArrayInfo";
+import { Config, JSONServiceDBConfig } from "./lib/JSONServiceDBConfig";
 
-type DataPath = Array<string>
+type DataPath = Array<string>;
 
-export type FindCallback = (entry: any, index: number | string) => boolean
+export type FindCallback = (entry: any, index: number | string) => boolean;
 
 export class JSONService {
-
-  private loaded: boolean = false
-  private data: KeyValue = {}
-  private readonly config: JSONServiceDBConfig
+  private loaded: boolean = false;
+  private data: KeyValue = {};
+  private readonly config: JSONServiceDBConfig;
   private capacitorStorage = new CapacitorStorage();
 
   /**
@@ -24,16 +23,16 @@ export class JSONService {
    * @param separator what to use as separator
    * @param syncOnSave force sync of the database (call fsync())
    */
-  
+
   constructor(
     dbuuid: string | Config,
     autoSave: boolean = true,
     prettyFormat: boolean = false,
-    separator: string = '/',
+    separator: string = "/",
     syncOnSave: boolean = false
   ) {
     if (dbuuid instanceof Config) {
-      this.config = dbuuid
+      this.config = dbuuid;
     } else {
       this.config = new Config(
         dbuuid,
@@ -41,36 +40,35 @@ export class JSONService {
         prettyFormat,
         separator,
         syncOnSave
-      )
+      );
     }
 
-    this.load((data)=>{
-
-      this.loaded = true
-
-    },(error)=>{
-
-      console.warn( error );
-
-    });
+    this.load(
+      (data) => {
+        this.loaded = true;
+      },
+      (error) => {
+        console.warn(error);
+      }
+    );
+  }
 
   /**
    * Process datapath into different parts
    * @param dataPath
    */
   private processDataPath(dataPath: string): DataPath {
-
     if (dataPath === undefined || !dataPath.trim()) {
-      throw new DataError("The Data Path can't be empty", 6)
+      throw new DataError("The Data Path can't be empty", 6);
     }
     if (dataPath == this.config.separator) {
-      return []
+      return [];
     }
 
-    dataPath = removeTrailingChar(dataPath, this.config.separator)
+    dataPath = removeTrailingChar(dataPath, this.config.separator);
 
     if (dataPath.length > 1 && dataPath.endsWith(this.config.separator)) {
-      dataPath = dataPath.substring(0, dataPath.length - 1)
+      dataPath = dataPath.substring(0, dataPath.length - 1);
     }
 
     const path = dataPath.split(this.config.separator);
@@ -78,62 +76,61 @@ export class JSONService {
     path.shift();
 
     return path;
-
   }
 
   private retrieveData(dataPath: DataPath, create: boolean = false) {
-    this.load()
+    this.load(null, null);
 
-    const thisDb = this
+    const thisDb = this;
 
     const recursiveProcessDataPath = (data: any, index: number): any => {
-      let property = dataPath[index]
+      let property = dataPath[index];
 
       /**
        * Find the wanted Data or create it.
        */
       function findData(isArray: boolean = false) {
         if (data.hasOwnProperty(property)) {
-          data = data[property]
+          data = data[property];
         } else if (create) {
           if (isArray) {
-            data[property] = []
+            data[property] = [];
           } else {
-            data[property] = {}
+            data[property] = {};
           }
-          data = data[property]
+          data = data[property];
         } else {
           throw new DataError(
             `Can't find dataPath: ${thisDb.config.separator}${dataPath.join(
               thisDb.config.separator
             )}. Stopped at ${property}`,
             5
-          )
+          );
         }
       }
 
-      const arrayInfo = ArrayInfo.processArray(property)
+      const arrayInfo = ArrayInfo.processArray(property);
       if (arrayInfo) {
-        property = arrayInfo.property
-        findData(true)
+        property = arrayInfo.property;
+        findData(true);
         if (!Array.isArray(data)) {
           throw new DataError(
             `DataPath: ${thisDb.config.separator}${dataPath.join(
               thisDb.config.separator
             )}. ${property} is not an array.`,
             11
-          )
+          );
         }
-        const arrayIndex = arrayInfo.getIndex(data, true)
+        const arrayIndex = arrayInfo.getIndex(data, true);
         if (!arrayInfo.append && data.hasOwnProperty(arrayIndex)) {
-          data = arrayInfo.getData(data)
+          data = arrayInfo.getData(data);
         } else if (create) {
           if (arrayInfo.append) {
-            data.push({})
-            data = data[data.length - 1]
+            data.push({});
+            data = data[data.length - 1];
           } else {
-            data[arrayIndex] = {}
-            data = data[arrayIndex]
+            data[arrayIndex] = {};
+            data = data[arrayIndex];
           }
         } else {
           throw new DataError(
@@ -141,35 +138,35 @@ export class JSONService {
               thisDb.config.separator
             )}. . Can't find index ${arrayInfo.index} in array ${property}`,
             10
-          )
+          );
         }
       } else {
-        findData()
+        findData();
       }
 
       if (dataPath.length == ++index) {
         // check data
-        return data
+        return data;
       }
-      return recursiveProcessDataPath(data, index)
-    }
+      return recursiveProcessDataPath(data, index);
+    };
 
     if (dataPath.length === 0) {
-      return this.data
+      return this.data;
     }
 
-    return recursiveProcessDataPath(this.data, 0)
+    return recursiveProcessDataPath(this.data, 0);
   }
 
   private getParentData(dataPath: string, create: boolean): DBParentData {
-    const path = this.processDataPath(dataPath)
-    const last = path.pop()
+    const path = this.processDataPath(dataPath);
+    const last = path.pop();
     return new DBParentData(
       this.retrieveData(path, create),
       this,
       dataPath,
       last
-    )
+    );
   }
 
   /**
@@ -177,8 +174,8 @@ export class JSONService {
    * @param dataPath path of the data to retrieve
    */
   public getData(dataPath: string): any {
-    const path = this.processDataPath(dataPath)
-    return this.retrieveData(path, false)
+    const path = this.processDataPath(dataPath);
+    return this.retrieveData(path, false);
   }
 
   /**
@@ -186,7 +183,7 @@ export class JSONService {
    * @param dataPath  path of the data to retrieve
    */
   public getObject<T>(dataPath: string): T {
-    return this.getData(dataPath)
+    return this.getData(dataPath);
   }
 
   /**
@@ -195,13 +192,13 @@ export class JSONService {
    */
   public exists(dataPath: string): boolean {
     try {
-      this.getData(dataPath)
-      return true
+      this.getData(dataPath);
+      return true;
     } catch (e) {
       if (e instanceof DataError) {
-        return false
+        return false;
       }
-      throw e
+      throw e;
     }
   }
 
@@ -214,14 +211,14 @@ export class JSONService {
   public getIndex(
     dataPath: string,
     searchValue: string | number,
-    propertyName: string = 'id'
+    propertyName: string = "id"
   ): number {
-    const data = this.getArrayData(dataPath)
+    const data = this.getArrayData(dataPath);
     return data
       .map(function (element: any) {
-        return element[propertyName]
+        return element[propertyName];
       })
-      .indexOf(searchValue)
+      .indexOf(searchValue);
   }
 
   /**
@@ -230,16 +227,16 @@ export class JSONService {
    * @param searchValue value to look for in the dataPath
    */
   public getIndexValue(dataPath: string, searchValue: string | number): number {
-    return this.getArrayData(dataPath).indexOf(searchValue)
+    return this.getArrayData(dataPath).indexOf(searchValue);
   }
 
   private getArrayData(dataPath: string) {
-    const result = this.getData(dataPath)
+    const result = this.getData(dataPath);
     if (!Array.isArray(result)) {
-      throw new DataError(`DataPath: ${dataPath} is not an array.`, 11)
+      throw new DataError(`DataPath: ${dataPath} is not an array.`, 11);
     }
-    const path = this.processDataPath(dataPath)
-    return this.retrieveData(path, false)
+    const path = this.processDataPath(dataPath);
+    return this.retrieveData(path, false);
   }
 
   /**
@@ -249,58 +246,55 @@ export class JSONService {
    * @param override overriding or not the data, if not, it will merge them
    */
   public push(dataPath: string, data: any, override: boolean = true): void {
-    const dbData = this.getParentData(dataPath, true)
+    const dbData = this.getParentData(dataPath, true);
     // if (!dbData) {
     //   throw new Error('Data not found')
     // }
 
-    let toSet = data
+    let toSet = data;
     if (!override) {
       if (Array.isArray(data)) {
-        let storedData = dbData.getData()
+        let storedData = dbData.getData();
         if (storedData === undefined) {
-          storedData = []
+          storedData = [];
         } else if (!Array.isArray(storedData)) {
           throw new DataError(
             "Can't merge another type of data with an Array",
             3
-          )
+          );
         }
-        toSet = storedData.concat(data)
+        toSet = storedData.concat(data);
       } else if (data === Object(data)) {
         if (Array.isArray(dbData.getData())) {
-          throw new DataError("Can't merge an Array with an Object", 4)
+          throw new DataError("Can't merge an Array with an Object", 4);
         }
-        toSet = merge(dbData.getData(), data)
+        toSet = merge(dbData.getData(), data);
       }
     }
-    dbData.setData(toSet)
+    dbData.setData(toSet);
 
-    this.autoSave();
-
+    this.autoSaveData();
   }
 
   /**
    * Delete the data
    * @param dataPath path leading to the data
    */
-  public delete(dataPath: string): void {
-    const dbData = this.getParentData(dataPath, true)
+  public del(dataPath: string): void {
+    const dbData = this.getParentData(dataPath, true);
     if (!dbData) {
       return;
     }
-    dbData.delete()
+    dbData.delete();
 
-    this.autoSave();
-
+    this.autoSaveData();
   }
 
   /**
    * Only use this if you know what you're doing.
    * It reset the full data of the database.
-   * @param data
    */
-  public autoSave(): void {
+  public autoSaveData(): void {
     if (this.config.autoSave) {
       this.save(null, null);
     }
@@ -312,7 +306,7 @@ export class JSONService {
    * @param data
    */
   public resetData(data: any): void {
-    this.data = data
+    this.data = data;
   }
 
   /**
@@ -320,47 +314,66 @@ export class JSONService {
    */
   public reload(): void {
     this.loaded = false;
-    this.load((data)=>{
-      this.loaded = true
-    },(error)=>{
-      console.warn(error);
-    });
-
+    this.load(
+      (data) => {
+        this.loaded = true;
+      },
+      (error) => {
+        console.warn(error);
+      }
+    );
   }
 
   /**
    * Manually load the database
    * It is automatically called when the first getData is done
    */
-  public load(callbackFunctionSuccess, callbackFunctionError){
+  public load(
+    callbackFunctionSuccess: ((arg0: any) => void) | null,
+    callbackFunctionError: ((arg0: any) => void) | null
+  ): void {
     if (this.loaded) {
-      return
+      return;
     }
-    try{            
-        CapacitorStorage.getKey(this.config.dbuuid, (data)=>{
-            this.data = data;
-            if((typeof callbackFunctionSuccess).toString().toLowerCase() === "function"){
-                callbackFunctionSuccess(data);
-            }else{
-                this.loaded = true;
-                return data;
-            }
-        }, (error)=>{
-            if((typeof callbackFunctionError).toString().toLowerCase() === "function"){
-                callbackFunctionError(error);
-            }else{
-              this.loaded = false;
-                return;
-            }
-        });
-
-    }catch(error){
-        if((typeof callbackFunctionError).toString().toLowerCase() === "function"){
+    try {
+      CapacitorStorage.getKey(
+        this.config.dbuuid,
+        (data) => {
+          this.data = data;
+          if (
+            callbackFunctionSuccess !== null &&
+            (typeof callbackFunctionSuccess).toString().toLowerCase() ===
+            "function"
+          ) {
+            callbackFunctionSuccess(data);
+          } else {
+            this.loaded = true;
+            return data;
+          }
+        },
+        (error: any): void => {
+          if (
+            callbackFunctionError !== null &&
+            (typeof callbackFunctionError).toString().toLowerCase() ===
+            "function"
+          ) {
             callbackFunctionError(error);
-        }else{
-          const err = new DatabaseError("Can't Load Database", 1, error)
-          throw err;
+          } else {
+            this.loaded = false;
+            return;
+          }
         }
+      );
+    } catch (error) {
+      if (
+        callbackFunctionError !== null &&
+        (typeof callbackFunctionError).toString().toLowerCase() === "function"
+      ) {
+        callbackFunctionError(error);
+      } else {
+        const err = new DatabaseError("Can't Load Database", 1, error);
+        throw err;
+      }
     }
   }
 
@@ -369,133 +382,199 @@ export class JSONService {
    * By default you can't save the database if it's not loaded
    * @param force force the save of the database
    */
-  public save(callbackFunctionSuccess, callbackFunctionError, force?: boolean){
-    force = force || false
+  public save(
+    callbackFunctionSuccess: ((arg0: any) => void) | null,
+    callbackFunctionError: ((arg0: any) => void) | null,
+    force?: boolean
+  ) {
+    force = force || false;
     if (!force && !this.loaded) {
-      throw new DatabaseError("DataBase not loaded. Can't write", 7)
+      throw new DatabaseError("DataBase not loaded. Can't write", 7);
     }
-    let data='';
+    let data = "";
     if (this.config.prettyFormat) {
-        data = JSON.stringify(this.data, null, 4)
-      } else {
-        data = JSON.stringify(this.data)
-      }
-    
-      try{            
-          CapacitorStorage.setKey(this.config.dbuuid, data, (data)=>{
-              if((typeof callbackFunctionSuccess).toString().toLowerCase() === "function"){
-                  callbackFunctionSuccess(data);
-              }else{
-                  return;
-              }
-          }, (error)=>{
-              if((typeof callbackFunctionError).toString().toLowerCase() === "function"){
-                  callbackFunctionError(error);
-              }else{
-                  return;
-              }
-          });
+      data = JSON.stringify(this.data, null, 4);
+    } else {
+      data = JSON.stringify(this.data);
+    }
 
-      }catch(error){
-          if((typeof callbackFunctionError).toString().toLowerCase() === "function"){
-              callbackFunctionError(error);
-          }else{
-            const err = new DatabaseError("Can't Write Database", 1, error)
-            throw err;
+    try {
+      CapacitorStorage.setKey(
+        this.config.dbuuid,
+        data,
+        (data: any) => {
+          if (
+            callbackFunctionSuccess !== null &&
+            (typeof callbackFunctionSuccess).toString().toLowerCase() ===
+            "function"
+          ) {
+            callbackFunctionSuccess(data);
+          } else {
+            return;
           }
+        },
+        (error: any) => {
+          if (
+            callbackFunctionError !== null &&
+            (typeof callbackFunctionError).toString().toLowerCase() ===
+            "function"
+          ) {
+            callbackFunctionError(error);
+          } else {
+            return;
+          }
+        }
+      );
+    } catch (error) {
+      if (
+        callbackFunctionError !== null &&
+        (typeof callbackFunctionError).toString().toLowerCase() === "function"
+      ) {
+        callbackFunctionError(error);
+      } else {
+        const err = new DatabaseError("Can't Write Database", 1, error);
+        throw err;
       }
-
+    }
   }
 
-  public function pullData (path, callbackFunctionSuccess, callbackFunctionError) => {
-    try{
-        let pathKeys = path.split(this.seperator);
-        let extractedObject = pathKeys.reduce((a, c) => a[c], this.data);
-        if((typeof callbackFunctionSuccess).toString().toLowerCase() === "function"){                
-            callbackFunctionSuccess(extractedObject);
-        }else{
-            return extractedObject;
-        }
-    }catch(error){
-        if((typeof callbackFunctionError).toString().toLowerCase() === "function"){
-            callbackFunctionError(error);
-        }else{
-            return;
-        }
+  public pullData(
+    path: string,
+    callbackFunctionSuccess: (arg0: any) => void,
+    callbackFunctionError: (arg0: any) => void
+  ): KeyValue | undefined {
+    try {
+      let pathKeys = path.split(this.config.separator);
+      let extractedObject = pathKeys.reduce((a, c) => a[c], this.data);
+      if (
+        (typeof callbackFunctionSuccess).toString().toLowerCase() === "function"
+      ) {
+        callbackFunctionSuccess(extractedObject);
+      } else {
+        return extractedObject;
+      }
+    } catch (error) {
+      if (
+        (typeof callbackFunctionError).toString().toLowerCase() === "function"
+      ) {
+        callbackFunctionError(error);
+      } else {
+        return;
+      }
     }
-  } 
-public function pushData (path, data, callbackFunctionSuccess, callbackFunctionError) => {
-    try{
-        this.updateJsonObject(path, data, this.data);
-        this.autosave?this.saveData(null, null);
-        if((typeof callbackFunctionSuccess).toString().toLowerCase() === "function"){                
-            callbackFunctionSuccess(this.data);
-        }else{
-            return this.data;
-        }
-    }catch(error){
-        if((typeof callbackFunctionError).toString().toLowerCase() === "function"){
-            callbackFunctionError(error);
-        }else{
-            return;
-        }
+  }
+  public pushData(
+    path: string,
+    data: string,
+    callbackFunctionSuccess: (arg0: KeyValue) => void,
+    callbackFunctionError: (arg0: any) => void
+  ): KeyValue | undefined {
+    try {
+      this.updateJsonObject(path, data, this.data);
+      this.config.autoSave ? this.autoSaveData() : null;
+      if (
+        (typeof callbackFunctionSuccess).toString().toLowerCase() === "function"
+      ) {
+        callbackFunctionSuccess(this.data);
+      } else {
+        return this.data;
+      }
+    } catch (error) {
+      if (
+        (typeof callbackFunctionError).toString().toLowerCase() === "function"
+      ) {
+        callbackFunctionError(error);
+      } else {
+        return;
+      }
     }
-} 
-public function addDataAfterId (afterId, data, callbackFunctionSuccess, callbackFunctionError) => {
+  }
+  public addDataAfterId(
+    afterId: any,
+    data: any,
+    callbackFunctionSuccess: any,
+    callbackFunctionError: any
+  ): KeyValue | undefined {
 
-    this.data = this.addNewObject(this.data, afterId, data);
-
-}
-public function addNewObject (mainContainer, idTobeMatched, newObject) => {
+    try {
+      this.data = this.addNewObject(this.data, afterId, data);
+      if (
+        (typeof callbackFunctionSuccess).toString().toLowerCase() === "function"
+      ) {
+        callbackFunctionSuccess(this.data);
+      } else {
+        return this.data;
+      }
+    } catch (error) {
+      if (
+        (typeof callbackFunctionError).toString().toLowerCase() === "function"
+      ) {
+        callbackFunctionError(error);
+      } else {
+        return;
+      }
+    }
+  }
+  public addNewObject(
+    mainContainer: KeyValue,
+    idTobeMatched: any,
+    newObject: any
+  ): KeyValue {
     for (let i = 0; i < mainContainer.length; i++) {
       if (mainContainer[i].id == idTobeMatched) {
         let indexOfNewObject = i + 1;
         mainContainer.splice(indexOfNewObject, 0, newObject);
         return mainContainer;
       } else if (mainContainer[i].data && mainContainer[i].data.length) {
-        mainContainer[i].data = this.addNewObject(mainContainer[i].data, idTobeMatched, newObject);
+        mainContainer[i].data = this.addNewObject(
+          mainContainer[i].data,
+          idTobeMatched,
+          newObject
+        );
       }
     }
     return mainContainer;
-}
-public function constructObject (path, data) => {
+  }
+  public constructObject(path: string, data: any): {} {
     const res = {};
-        let ref = res;
-        let pathArr = path.split(this.seperator.toString());
-        let counter=0;
-        while(counter<pathArr.length){
-        let segmentData = ref[pathArr[counter]];
-           ref[pathArr[counter]] = segmentData?segmentData:{};
-           counter === (pathArr.length - 1)?ref[pathArr[counter]] = data:null;
-           ref = ref[pathArr[counter]];
-           counter++;
-        };
-        return res;
-}
-public function updateJsonObject (path, value, obj) => {
+    let ref = res;
+    let pathArr = path.split(this.config.separator.toString());
+    let counter = 0;
+    while (counter < pathArr.length) {
+      let segmentData = ref[pathArr[counter]];
+      ref[pathArr[counter]] = segmentData ? segmentData : {};
+      counter === pathArr.length - 1 ? (ref[pathArr[counter]] = data) : null;
+      ref = ref[pathArr[counter]];
+      counter++;
+    }
+    return res;
+  }
+  public updateJsonObject(path: string, value: string, obj: KeyValue): void {
     var objValue = value;
     try {
-        objValue = JSON.parse(value);
-    } catch (e) { } //eat the error, must not be json so carry on... Hack to do a valid JSON check
+      objValue = JSON.parse(value);
+    } catch (e) { }
 
-    var parts = path.split("."), part;
+    var parts = path.split("."),
+      part: string | number | undefined;
     var last = parts.pop();
-    while (part = parts.shift()) {
-        if (typeof obj[part] != "object")
-            obj[part] = {};
-        obj = obj[part];
+    while ((part = parts.shift())) {
+      if (typeof obj[part] != "object") obj[part] = {};
+      obj = obj[part];
     }
-    if (obj.hasOwnProperty(last) && obj[last] && obj[last].constructor === Array) {
-        obj[last].push(objValue);
+    if (
+      obj.hasOwnProperty(last) &&
+      obj[last] &&
+      obj[last].constructor === Array
+    ) {
+      obj[last].push(objValue);
+    } else if (obj.hasOwnProperty(last) && obj[last]) {
+      var objArray = [];
+      objArray.push(obj[last]);
+      objArray.push(objValue);
+      obj[last] = objArray;
+    } else {
+      obj[last] = objValue;
     }
-    else if (obj.hasOwnProperty(last) && obj[last]) {
-        var objArray = [];
-        objArray.push(obj[last])
-        objArray.push(objValue);
-        obj[last] = objArray;
-    }
-    else {
-        obj[last] = objValue;
-    }
-}
+  }
 }
