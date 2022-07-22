@@ -47,7 +47,6 @@ export class CapacitorStorage {
                   key,
                   error
                 );
-
                 callbackError(error);
               }
             });
@@ -61,7 +60,6 @@ export class CapacitorStorage {
             key,
             error
           );
-
           callbackError(error);
         }
       });
@@ -82,7 +80,6 @@ export class CapacitorStorage {
             key,
             error
           );
-
           callbackError(error);
         }
       });
