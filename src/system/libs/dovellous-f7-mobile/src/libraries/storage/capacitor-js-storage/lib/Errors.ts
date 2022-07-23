@@ -1,27 +1,23 @@
 export abstract class NestedError extends Error {
-    readonly inner?: Error
-    readonly id: Number
+  readonly inner?: Error;
+  readonly id: Number;
 
+  public constructor(message: string, id: Number, inner?: Error) {
+    super(message);
+    this.inner = inner;
+    this.id = id;
+    this.name = this.constructor.name;
+  }
 
-    public constructor(message: string, id: Number, inner?: Error) {
-        super(message)
-        this.inner = inner
-        this.id = id
-        this.name = this.constructor.name
+  toString(): string {
+    const string = this.name + ": " + this.message;
+    if (this.inner) {
+      return string + ":\n" + this.inner;
     }
-
-
-    toString(): string {
-        const string = this.name + ": " + this.message
-        if (this.inner) {
-            return string + ':\n' + this.inner
-        }
-        return string
-    }
+    return string;
+  }
 }
 
-export class CapacitorStorageError extends NestedError {
-}
+export class CapacitorStorageError extends NestedError {}
 
-export class StorageDataError extends NestedError {
-}
+export class StorageDataError extends NestedError {}

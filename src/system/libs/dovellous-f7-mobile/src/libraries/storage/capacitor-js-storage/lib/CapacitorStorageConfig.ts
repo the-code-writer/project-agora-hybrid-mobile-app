@@ -4,9 +4,7 @@ export interface CapacitorStorageConfig {
 
 export class Config implements CapacitorStorageConfig {
   prettyFormat: boolean;
-  constructor(
-    prettyFormat: boolean = false
-  ) {
+  constructor(prettyFormat: boolean = false) {
     this.prettyFormat = prettyFormat;
   }
 }
