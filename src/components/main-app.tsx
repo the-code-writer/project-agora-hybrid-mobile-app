@@ -5,23 +5,13 @@ import {
     f7ready,
     App,
     Panel,
-    Views,
     View,
     Popup,
     Page,
     Navbar,
-    Toolbar,
-    NavRight,
     Link,
     Block,
-    BlockTitle,
-    LoginScreen,
-    LoginScreenTitle,
     List,
-    ListItem,
-    ListInput,
-    ListButton,
-    BlockFooter, Button
 } from 'framework7-react';
 
 import Dom7 from "dom7";
@@ -30,7 +20,7 @@ import capacitorApp from '../assets/js/capacitor-app';
 import routes from '../assets/js/routes';
 
 
-import AppState from "../system/libs/dovellous-f7-mobile/state/app-data";
+import AppState from "../system/libs/dovellous-f7/state/app-data";
 
 const MyApp = () => {
 

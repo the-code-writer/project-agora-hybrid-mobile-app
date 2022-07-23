@@ -1848,6 +1848,13 @@
   "resolved" "https://registry.npmjs.org/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz"
   "version" "2.0.4"
 
+"@lsqswl/rsaencrypt@^1.0.3":
+  "integrity" "sha512-FBl+bN58IOEBXH8g/Bh43/Q8AZYU8WppGvVCett8tZx5PZq2xrAfjpjtijQbmTfP//8wSLQ4DbCHJ9zcX6bsMg=="
+  "resolved" "https://registry.npmjs.org/@lsqswl/rsaencrypt/-/rsaencrypt-1.0.3.tgz"
+  "version" "1.0.3"
+  dependencies:
+    "jsencrypt" "^3.0.0-rc.1"
+
 "@mui/base@5.0.0-alpha.89":
   "integrity" "sha512-2g18hzt947qQ3gQQPOPEBfzQmaT2wafVhyJ7ZOZXeU6kKb88MdlHoPkK2lKXCHMBtRGnnsiF36j0rmhQXu0I5g=="
   "resolved" "https://registry.npmjs.org/@mui/base/-/base-5.0.0-alpha.89.tgz"
@@ -8221,7 +8228,7 @@
     "ws" "^7.4.6"
     "xml-name-validator" "^3.0.0"
 
-"jsencrypt@^3.2.1":
+"jsencrypt@^3.0.0-rc.1", "jsencrypt@^3.2.1":
   "integrity" "sha512-k1sD5QV0KPn+D8uG9AdGzTQuamt82QZ3A3l6f7TRwMU6Oi2Vg0BsL+wZIQBONcraO1pc78ExMdvmBBJ8WhNYUA=="
   "resolved" "https://registry.npmjs.org/jsencrypt/-/jsencrypt-3.2.1.tgz"
   "version" "3.2.1"

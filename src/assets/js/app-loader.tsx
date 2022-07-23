@@ -22,7 +22,7 @@ import '../css/icons.css';
 import '../css/app.scss';
 import '../css/styles.scss';
 
-import DovellousF7MobilePlugin from '../../system/libs/dovellous-f7-mobile';
+import DovellousF7Plugin from '../../system/libs/dovellous-f7';
 
 // Import App Component
 import MainApp from '../../components/main-app.jsx';
@@ -34,7 +34,7 @@ Framework7.use(Framework7React)
 Framework7.use(Framework7Keypad);
 
 // Init dovellous plugin to Framework7
-Framework7.use(DovellousF7MobilePlugin);
+Framework7.use(DovellousF7Plugin);
 
 // Mount React App
 const root = createRoot(document.getElementById('app'));

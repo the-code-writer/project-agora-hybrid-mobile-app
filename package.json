@@ -39,6 +39,7 @@
     "@capacitor/text-zoom": "^1.0.8",
     "@capacitor/toast": "^1.0.8",
     "@joeattardi/emoji-button": "^4.6.4",
+    "@lsqswl/rsaencrypt": "^1.0.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.0",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
