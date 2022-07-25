@@ -1,4 +1,5 @@
 import {DF7} from "./df7";
+import K from "./src/libraries/app/konstants";
 
 /**
  * Dovellous F7 Plugin for Framework7 1.0.0
@@ -12,111 +13,124 @@ import {DF7} from "./df7";
  * Released on: July 29, 2022
  */
 
-function DovellousClassConstructor(Framework7Class: any) {
-    return class Dovellous extends Framework7Class {
-        constructor(
-            app: { 
-                utils: any; 
-                $: any; 
-                request: any; 
-                params: { 
-                    dovellous: any; 
-                };
-            }, 
-
-            params: any) {
-
-            super(params, [app]);
-
-            const Utils = app.utils;
-
-            const $ = app.$;
-
-            const request = app.request;
-
-            const dovellous = this;
-
-            dovellous.app = app;
-
-            const defaults = Utils.extend(
-                {
-                    on: {},
-                },
-                app.params.dovellous,
-            );
-
-            dovellous.params = Utils.extend(defaults, params);
-
-        }
-
-        fireEvent(name: any, data: any) {
-
-            this.emit(name, data);
-            
-        }
-
-    };
-}
-
 // eslint-disable-next-line
 let debugEnabled = true;
 const DovellousF7Plugin = {
-    name: 'dovellous',
-    install() {
-        const Framework7 = this;
-        Framework7.Dovellous = DovellousClassConstructor(Framework7.Class);
-        Framework7.DF7 = new DF7(this.params.dovellous.modules);
-    },
-    params: {
-        dovellous: {
-            modules: {},
+    // Module Name
+  name: 'demo-module',
+  /* Install callback
+  It will be executed right after component is installed
+  Context of this callback points to Class where it was installed
+  */
+  install() {
+    const Class = this;
+  },
+  /* Create callback
+  It will be executed in the very beginning of class initilization (when we create new instance of the class)
+  */
+  create() {
+    var app = this;
+    // extend app methods with debugger methods when app instance just created
+    app.dovellous = {
+      K: K,
+      libs: new DF7(app.params.dovellous.modules),
+      enableDebug: function () {
+        debugEnabled = true;
+        app.params.dovellous.debugger = true;
+      },
+      disableDebug: function () {
+        debugEnabled = false;
+        app.params.dovellous.debugger = false;
+      },
+    }
+  },
+  /*
+  Object with default class/plugin parameters
+  */
+  params: {
+    dovellous: {
+      debugger: true,
+      modules: {
+        agora: {
+
         },
-        debugger: false,
+        jsonDatabaseService: {
+
+        }
+        
+      }
+    }
+  },
+  /* proto object extends Class prototype */
+  proto: {
+    demoDF7() {
+      return 'demo-module-proto-method';
     },
-    create() {
-        const app = this;
-        const $ = app.$;
-        app.df7 = DF7;
-        app.debugger = {
-            enable: function () {
-              debugEnabled = true;
-            },
-            disable: function () {
-              debugEnabled = false;
-            },
-          };
+    demoStaticDF7: 'demo-module-proto-static',
+  },
+  // Extend Class with static props and methods, e.g. Class.myMethod
+  static: {
+    demoSTATICF7() {
+      return 'demo-module-class-method';
     },
-    on: {
-        init: () => {
-            const app = this;
-            if (app.params.debugger){
-                debugEnabled = true;
-            } 
-            if (debugEnabled){
-                console.log("app init");
-            }
-          },
-          pageBeforeIn: function (page: any) {
-            const $ = page.app.$;
-            const app = page.app;
-            if (debugEnabled) console.log("pageBeforeIn", page);
-          },
-          pageAfterIn: function (page: any) {
-            if (debugEnabled) console.log("pageAfterIn", page);
-          },
-          pageBeforeOut: function (page: any) {
-            if (debugEnabled) console.log("pageBeforeOut", page);
-          },
-          pageAfterOut: function (page: any) {
-            if (debugEnabled) console.log("pageAfterOut", page);
-          },
-          pageInit: function (page: any) {
-            if (debugEnabled) console.log("pageInit", page);
-          },
-          pageBeforeRemove: function (page: any) {
-            if (debugEnabled) console.log("pageBeforeRemove", page);
-          },
+    demoStaticSTATICF7: 'demo-module-class-static',
+  },
+  /* Initialized instance Props & Methods */
+  instance: {
+    demoPropF7: true,
+    demoMethodF7() {
+      return 'demo-method';
     },
+  },
+  /* Event handlers */
+  on: {
+    demoEventF7(a, b) {
+      console.log('demo-event', a, b);
+    },
+    init: function () {
+      var app = this;
+      if (app.params.DF7.debugger) debugEnabled = true;
+      if(app.params.dovellous.debugger) console.log('app init');
+    },
+    pageBeforeIn: function (page) {
+      const $ = page.app.$;
+      const app = page.app;
+      if(app.params.dovellous.debugger) console.log('pageBeforeIn', page);
+    },
+    pageAfterIn: function (page) {
+      const $ = page.app.$;
+      const app = page.app;
+      if(app.params.dovellous.debugger) console.log('pageAfterIn', page);
+    },
+    pageBeforeOut: function (page) {
+      const $ = page.app.$;
+      const app = page.app;
+      if(app.params.dovellous.debugger) console.log('pageBeforeOut', page);
+    },
+    pageAfterOut: function (page) {
+      const $ = page.app.$;
+      const app = page.app;
+      if(app.params.dovellous.debugger) console.log('pageAfterOut', page);
+    },
+    pageInit: function (page) {
+      const $ = page.app.$;
+      const app = page.app;
+      if(app.params.dovellous.debugger) console.log('pageInit', page);
+    },
+    pageBeforeRemove: function (page) {
+      const $ = page.app.$;
+      const app = page.app;
+      if(app.params.dovellous.debugger) console.log('pageBeforeRemove', page);
+    },
+  },
+  /* Handle clicks */
+  clicks: {
+    // prop name means CSS selector of element to add click handler
+    'p': (_$clickedEl: any, data: any): void => {
+      // $clickedEl: Dom7 instance of clicked element
+      // data: element data set (data- attributes)
+    },
+  }
 };
 
 export { DovellousF7Plugin as default };

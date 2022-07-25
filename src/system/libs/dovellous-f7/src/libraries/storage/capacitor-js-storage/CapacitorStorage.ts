@@ -26,7 +26,7 @@ export class CapacitorStorage {
    * @param callbackSuccess
    * @param callbackError
    */
-  public setKey(
+  setKey(
     key: any,
     value: any,
     callbackSuccess: (arg0: string | null) => void,
@@ -72,7 +72,7 @@ export class CapacitorStorage {
    * @param callbackSuccess
    * @param callbackError
    */
-  public getKey(
+  getKey(
     key: any,
     callbackSuccess: (arg0: string | null) => void,
     callbackError: (arg0: any) => void

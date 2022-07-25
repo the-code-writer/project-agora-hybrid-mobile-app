@@ -4,6 +4,15 @@ import Framework7 from 'framework7/lite-bundle';
 
 import {CapacitorStorage} from './src/libraries/storage/capacitor-js-storage/CapacitorStorage';
 import {JSONDatabaseService} from './src/libraries/storage/json-db-service/JSONDatabaseService';
+import {Config as JSONDatabaseServiceConfig} from './src/libraries/storage/json-db-service/lib/JSONDatabaseServiceConfig';
+
+import { Config as AgoraConfig } from './src/libraries/agora/lib/AgoraConfig';
+import { VoiceCallConfig } from './src/libraries/agora/apps/voice/VoiceCallConfig';
+import { InstantMessagingConfig } from './src/libraries/agora/apps/instant-messaging/InstantMessagingConfig';
+import { VideoCallConfig } from './src/libraries/agora/apps/video/VideoCallConfig';
+import { LiveStreamingConfig } from './src/libraries/agora/apps/live-streaming/LiveStreamingConfig';
+import { WhiteBoardConfig } from './src/libraries/agora/apps/white-board/WhiteBoardConfig';
+
 import SqliteService from './src/libraries/databases/sqlite-service';
 import Blockchain from './src/libraries/cryptography/blockchain';
 import Encryption from './src/libraries/cryptography/encryption';
@@ -20,12 +29,6 @@ import {Agora} from './src/libraries/agora/Agora';
 import WalframAlpha from './src/libraries/wolfram-alpha';
 import FileSystem from './src/libraries/filesystem';
 import NetworkRequest from './src/libraries/services/requests';
-import { Config as AgoraConfig } from './src/libraries/agora/lib/AgoraConfig';
-import { VoiceCallConfig } from './src/libraries/agora/apps/voice/VoiceCallConfig';
-import { InstantMessagingConfig } from './src/libraries/agora/apps/instant-messaging/InstantMessagingConfig';
-import { VideoCallConfig } from './src/libraries/agora/apps/video/VideoCallConfig';
-import { LiveStreamingConfig } from './src/libraries/agora/apps/live-streaming/LiveStreamingConfig';
-import { WhiteBoardConfig } from './src/libraries/agora/apps/white-board/WhiteBoardConfig';
 
 interface DF7Modules {
     modules: any;
@@ -75,7 +78,7 @@ export class DF7 {
 
     public encryption: any = Encryption;
 
-    public jasonDatabaseService: JSONDatabaseService;
+    public jsonDatabaseService: any;
 
     public mimeTypes: any = MimeTypes;
 
@@ -98,24 +101,35 @@ export class DF7 {
       } else {
         this.config = new DF7Config(modules);
       }
-
       this.loadModules();
-
     }
   
     private loadModules(){
+
         //Initialise AgoraLibrary
+
         if(
-            this.config.modules.hasOwnProperty(K.Modules.AGORA) 
-            && this.config.modules.agora instanceof AgoraConfig){
-            this.agora = new Agora(
-                this.config.modules.agora.voiceCall || <VoiceCallConfig> {},
-                this.config.modules.agora.videoCall || <VideoCallConfig> {},
-                this.config.modules.agora.instantMessaging || <InstantMessagingConfig> {},
-                this.config.modules.agora.voiceCall || <LiveStreamingConfig> {},
-                this.config.modules.agora.voiceCall || <WhiteBoardConfig> {},
-            );
-        }
+          this.config.modules.hasOwnProperty(K.Modules.AGORA) 
+          ){
+          this.agora = new Agora(
+              this.config.modules.agora.voiceCall || <VoiceCallConfig> {},
+              this.config.modules.agora.videoCall || <VideoCallConfig> {},
+              this.config.modules.agora.instantMessaging || <InstantMessagingConfig> {},
+              this.config.modules.agora.voiceCall || <LiveStreamingConfig> {},
+              this.config.modules.agora.voiceCall || <WhiteBoardConfig> {},
+          );
+      }
+      
+      //Initialise JsonDatabaseService
+
+      if(
+        this.config.modules.hasOwnProperty(K.Modules.JSON_DATABASE_SERVICE) 
+      ){
+        
+        this.jsonDatabaseService = JSONDatabaseService.prototype;
+
+      }
+    
     }
 
   }

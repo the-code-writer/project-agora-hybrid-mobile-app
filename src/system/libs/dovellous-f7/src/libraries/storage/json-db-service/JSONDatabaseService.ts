@@ -1,4 +1,4 @@
-import CapacitorStorage from "../capacitor-storage";
+import {CapacitorStorage} from "../capacitor-js-storage/CapacitorStorage";
 import { KeyValue, merge, removeTrailingChar } from "./lib/Utils";
 import { DatabaseError, DataError } from "./lib/Errors";
 import { DBParentData } from "./lib/DBParentData";
@@ -13,7 +13,7 @@ export class JSONDatabaseService {
   private loaded: boolean = false;
   private data: KeyValue = {};
   private readonly config: JSONDatabaseServiceConfig;
-  private capacitorStorage = new CapacitorStorage();
+  private capacitorStorage = new CapacitorStorage(true);
 
   /**
    * JSONDatabaseService Constructor
@@ -336,7 +336,7 @@ export class JSONDatabaseService {
       return;
     }
     try {
-      CapacitorStorage.getKey(
+      this.capacitorStorage.getKey(
         this.config.dbuuid,
         (data) => {
           this.data = data;
@@ -399,7 +399,7 @@ export class JSONDatabaseService {
     }
 
     try {
-      CapacitorStorage.setKey(
+      this.capacitorStorage.setKey(
         this.config.dbuuid,
         data,
         (data: any) => {

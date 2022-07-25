@@ -3,7 +3,8 @@ const K = {
         AGORA: "agora",
         VAIDA: "vaida",
         FIREBASE: "firebase",
-    }
+        JSON_DATABASE_SERVICE: "jsonDatabaseService"
+    },
     Oauth: {
         BEARER_TOKEN: "Bearer Token",
         BASIC: "Basic",

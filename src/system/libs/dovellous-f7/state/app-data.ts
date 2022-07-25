@@ -16,12 +16,14 @@ const AppState = createStore({
     state: {
 
         /* ######## AUTH ######## */
-
+ 
         authLoginIsLoading: false,
         authLoginWithPIN: true,
         authLoginPINLength: 6,
 
         /* ######## AUTH ######## */
+
+        defaultLanguage: 'en',
 
         loggedIn: false,
         isSigningIn: false,
@@ -335,15 +337,29 @@ const AppState = createStore({
         contacts: [],
         location: {},
 
-        /* ######## AUTH ######## *///
-
-        /* ######## AUTH ######## */
-
     },
     getters: {
+
+        defaultLanguage({state}) {
+            return state.defaultLanguage;
+        },
+
+        /* ######## AUTH ######## */
+ 
         authLoginIsLoading({state}) {
             return state.authLoginIsLoading;
         },
+
+        authLoginWithPIN({state}) {
+            return state.authLoginWithPIN;
+        },
+
+        authLoginPINLength({state}) {
+            return state.authLoginPINLength;
+        },
+
+        /* ######## AUTH ######## */
+
         getloggedIn({state}) {
             return state.loggedIn;
         },
