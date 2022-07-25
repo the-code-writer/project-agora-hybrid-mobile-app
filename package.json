@@ -101,14 +101,14 @@
     "rbuild": "react-scripts build",
     "rtest": "react-scripts test --env=jsdom",
     "reject": "react-scripts eject",
-    "rexport": "yarn build && npx cap copy android  && npx cap sync android && npx cap run android",
+    "rexport": "npm build && npx cap sync android && npx cap run android",
     "start": "npm run dev",
     "dev": "cross-env NODE_ENV=development vite",
     "build": "cross-env NODE_ENV=production vite build && npx workbox generateSW workbox-config.js",
     "build-capacitor-ios": "cross-env NODE_ENV=production vite build && npx cap copy ios",
     "build-capacitor-android": "cross-env NODE_ENV=production vite build && npx cap copy android",
-    "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./src/Assets/Fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./src/Assets/Fonts/",
-    "watch": "copy-and-watch --watch src/system/libs/dovellous-f7-mobile/src/**/*.{html,json,png,jpg,svg,ts,tsx,js,jsx,html} src/system/libs/dovellous-f7-mobile/src/**/*. ../project-f7-mobile/src"
+    "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./src/system/libs/dovellous-f7/assets/Fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./src/system/libs/dovellous-f7/assets/Fonts/",
+    "watch": "copy-and-watch --watch src/system/libs/dovellous-f7/src/**/*.{html,json,png,jpg,svg,ts,tsx,js,jsx,html} src/system/libs/dovellous-f7/src/**/*. ../project-f7-mobile/src"
   },
   "browserslist": {
     "production": [

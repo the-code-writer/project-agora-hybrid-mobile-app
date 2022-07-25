@@ -6,12 +6,12 @@ import {CapacitorStorage} from './src/libraries/storage/capacitor-js-storage/Cap
 import {JSONDatabaseService} from './src/libraries/storage/json-db-service/JSONDatabaseService';
 import {Config as JSONDatabaseServiceConfig} from './src/libraries/storage/json-db-service/lib/JSONDatabaseServiceConfig';
 
-import { Config as AgoraConfig } from './src/libraries/agora/lib/AgoraConfig';
 import { VoiceCallConfig } from './src/libraries/agora/apps/voice/VoiceCallConfig';
 import { InstantMessagingConfig } from './src/libraries/agora/apps/instant-messaging/InstantMessagingConfig';
 import { VideoCallConfig } from './src/libraries/agora/apps/video/VideoCallConfig';
 import { LiveStreamingConfig } from './src/libraries/agora/apps/live-streaming/LiveStreamingConfig';
 import { WhiteBoardConfig } from './src/libraries/agora/apps/white-board/WhiteBoardConfig';
+import Agora from './src/libraries/agora/Agora';
 
 import SqliteService from './src/libraries/databases/sqlite-service';
 import Blockchain from './src/libraries/cryptography/blockchain';
@@ -25,7 +25,7 @@ import AppImages from './src/libraries/app/images';
 import K from './src/libraries/app/konstants';
 import {GoogleFirebase} from './src/libraries/firebase/GoogleFirebase';
 import {Vaida} from './src/libraries/vaida/Vaida';
-import {Agora} from './src/libraries/agora/Agora';
+
 import WalframAlpha from './src/libraries/wolfram-alpha';
 import FileSystem from './src/libraries/filesystem';
 import NetworkRequest from './src/libraries/services/requests';
@@ -50,45 +50,77 @@ class DF7Config implements DF7Modules {
     }
 }
 
-export class DF7 {
+class Dovellous{
 
-    public config: DF7Config;
+  Libraries = {
 
-    public K: any = K;
+    Agora: null
 
-    public agora: Agora;
+  }
 
-    public appImages: any = AppImages;
+  constructor(){
 
-    public appThemes: any = AppThemes;
+    const self = this;
 
-    public base64: any = Base64;
+    window.addEventListener(K.Events.Modules.Agora.ON_APP_INIT, function (eventParams){
 
-    public blockchain: any = Blockchain;
+      self.Libraries.Agora = eventParams.detail[0];
+    
+      const eventData = eventParams.detail[1];
+    
+    });
 
-    public capacitorStorage: CapacitorStorage;
+    this.init();
 
-    public device: any =  DeviceData;
+  }
 
-    public fileSystem: FileSystem;
+  init () {
 
-    public firebase: GoogleFirebase;
+    Agora(params);
 
-    public vaida: Vaida;
+  }
 
-    public encryption: any = Encryption;
+}
 
-    public jsonDatabaseService: any;
+export class DF7X {
 
-    public mimeTypes: any = MimeTypes;
+    config: DF7Config;
 
-    public request: any = NetworkRequest;
+    K: any = K;
+
+    agora: any = {};
+
+    appImages: any;
+
+    appThemes: any;
+
+    base64: any;
+
+    blockchain: any;
+
+    capacitorStorage: any;
+
+    device: any;
+
+    fileSystem: any;
+
+    firebase: any;
+
+    vaida: any;
+
+    encryption: any;
+
+    jsonDatabaseService: any;
+
+    mimeTypes: any;
+
+    request: any;
   
-    public snippets: any = Snippets;
+    snippets: any;
 
-    public sqliteService: any = SqliteService;
+    sqliteService: any;
 
-    public walframAlpha: any = WalframAlpha;
+    walframAlpha: any;
     
     /**
      * CapacitorStorage Constructor
@@ -104,32 +136,53 @@ export class DF7 {
       this.loadModules();
     }
   
-    private loadModules(){
+    loadModules(){
 
         //Initialise AgoraLibrary
 
         if(
           this.config.modules.hasOwnProperty(K.Modules.AGORA) 
           ){
-          this.agora = new Agora(
+
+            if(this.config.modules.agora.voiceCall){
+
+              this.agora.voiceCall = Agora.Module("VoiceCall");
+
+            }
               this.config.modules.agora.voiceCall || <VoiceCallConfig> {},
               this.config.modules.agora.videoCall || <VideoCallConfig> {},
               this.config.modules.agora.instantMessaging || <InstantMessagingConfig> {},
               this.config.modules.agora.voiceCall || <LiveStreamingConfig> {},
-              this.config.modules.agora.voiceCall || <WhiteBoardConfig> {},
-          );
+              this.config.modules.agora.voiceCall || <WhiteBoardConfig> {}
+
+          };
       }
       
-      //Initialise JsonDatabaseService
-
-      if(
-        this.config.modules.hasOwnProperty(K.Modules.JSON_DATABASE_SERVICE) 
-      ){
-        
-        this.jsonDatabaseService = JSONDatabaseService.prototype;
-
-      }
-    
     }
+ 
+window.addEventListener("OnAppInit", function (eventParams){
 
-  }
+  const agora = eventParams.detail[0];
+
+  const eventData = eventParams.detail[1];
+
+  agora.modules.voiceCall.helloWorld().then(function (res) {
+
+    console.log(":: RES ::", res);
+
+    console.warn(":: EVENT DATA ::", eventData);
+
+    console.log(":: AGORA ::", agora);
+
+    console.warn(":: EVENT DETAIL ::", eventParams.detail);
+
+  });
+
+});
+
+  const params = {
+    a: "A",
+    b: [1, 2, 3, 4, 5]
+  };
+
+Agora(params);

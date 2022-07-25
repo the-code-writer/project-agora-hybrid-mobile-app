@@ -66,6 +66,15 @@ const K = {
             DEVICE_READY: 'event-app-device-ready',
 
         },
+        Modules: {
+
+            Agora: {
+
+                ON_APP_INIT: "ModulesAgoraOnAppInit"
+                
+            }
+
+        }
     },
     Dots: {
         white: "Konstants",
