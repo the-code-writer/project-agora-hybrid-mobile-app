@@ -1,5 +1,10 @@
-import RtcEngine from 'react-native-agora';
+//import RtcEngine from 'react-native-agora';
 
+var RtcEngine = {
+	create: (appID) => {
+		//console.warn(":: CREATE RTC ENGINE");
+	}
+}
 
 const AgoraLibrary = Class.extend({
 	init: function(events, options) {
@@ -15,8 +20,9 @@ const AgoraLibrary = Class.extend({
 		let parent = {
 
 			isLoaded: false,
-
 			params: null,
+
+			RTC_ENGINE: null,
 
 			APP_ID: null,
 			PRIMARY_CERTIFICATE: null,
@@ -27,7 +33,9 @@ const AgoraLibrary = Class.extend({
 
 			initModules: (app, options) => {
 
-				console.warn("::INIT MODULES::", app, options);
+				//console.warn("::INIT MODULES::", app, options);
+
+				parent.RTC_ENGINE = RtcEngine;
 
 				parent.APP_ID = options.agora.appId;
 				parent.PRIMARY_CERTIFICATE = options.agora.primaryCertificate;
@@ -36,7 +44,7 @@ const AgoraLibrary = Class.extend({
 				parent.TOKENS = options.agora.tokens;
 				parent.DEFAULT_TOKENS = options.agora.tokens.default;
 
-				RtcEngine.create(parent.APP_ID);
+				parent.RTC_ENGINE.create(parent.APP_ID);
 
 				parent.voiceCall.init(
 					app, options.agora.voiceCallConfig ||
@@ -62,11 +70,10 @@ const AgoraLibrary = Class.extend({
 
 			generateToken: ()=>{
 
-
-
 			},
 
 			voiceCall: {
+
 				isReady: false,
 
 				params: {
@@ -112,6 +119,7 @@ const AgoraLibrary = Class.extend({
 			},
 			
 			videoCall: {
+
 				isReady: false,
 
 				params: {
@@ -157,6 +165,7 @@ const AgoraLibrary = Class.extend({
 			},
 			
 			instantMessaging: {
+
 				isReady: false,
 
 				params: {
@@ -202,6 +211,7 @@ const AgoraLibrary = Class.extend({
 			},
 			
 			liveStreaming: {
+
 				isReady: false,
 
 				params: {
@@ -247,6 +257,7 @@ const AgoraLibrary = Class.extend({
 			},
 			
 			whiteBoard: {
+				
 				isReady: false,
 
 				params: {
@@ -296,101 +307,20 @@ const AgoraLibrary = Class.extend({
 	})(),
 });
 
-// Parent constructor
-function DovellousEvent(name) {
-	this.name = name;
-}
+// Agora Module Here
 
-/**
- * Event dispatcher template:
- * param object data
- * return null
- */
-DovellousEvent.prototype.dispatch = function(name, data) {
-	// Dispatch the event
-	window.dispatchEvent(new CustomEvent(name, {
-		detail: data
-	}));
-};
-
-// Child constructor
-function DovellousLibraryEvent(name) {
-	// Call parent constructor with proper arguments
-	DovellousEvent.call(this, name);
-}
-
-// Inheritance
-DovellousLibraryEvent.prototype = Object.create(DovellousEvent.prototype);
-DovellousLibraryEvent.prototype.constructor = DovellousLibraryEvent;
-
-const DovellousEventItems = K.Events.Modules.Agora;
-
-Object.keys(DovellousEventItems).map((objKey, objIndex) => {
-
-	Object.keys(DovellousEventItems[objKey]).map((key, index) => {
-		/**
-		 *
-		 * @returns {*}
-		 * @constructor
-		 */
-		DovellousLibraryEvent.prototype[DovellousEventItems[objKey][key]] = (data, f7) => {
-
-			if(f7){
-
-				f7.emit(DovellousEventItems[objKey][key], data);
-
-			}
-			
-			// Call parent method
-			return DovellousEvent.prototype.dispatch.call(this, DovellousEventItems[objKey][key], data);
-		};
-
-	});
-
-});
+DovellousEventDispatcher(K.Events.Modules.Agora);
 
 /**
  *
  * @type {DovellousLibraryEvent}
  */
-const agoraLibEvent = new DovellousLibraryEvent("agoraLibEvent");
+const agoraLibEvent = new DovellousLibraryEvent(K.Events.Modules.Agora.AgoraLibEvent.NAME);
 
 const Agora = (options) => {
 	/**
 	 * @type {DovellousLibrary}
 	 */
 	return new AgoraLibrary(agoraLibEvent, options);
+
 };
-
-//export Agora;
-
-/*
-
-window.addEventListener("OnAppInit", function (eventParams){
-
-  const agora = eventParams.detail[0];
-
-  const eventData = eventParams.detail[1];
-
-  agora.modules.voiceCall.helloWorld().then(function (res) {
-
-    console.log(":: RES ::", res);
-
-    console.warn(":: EVENT DATA ::", eventData);
-
-    console.log(":: AGORA ::", agora);
-
-    console.warn(":: EVENT DETAIL ::", eventParams.detail);
-
-  });
-
-});
-
-  const params = {
-    a: "A",
-    b: [1, 2, 3, 4, 5]
-  };
-
-  Agora(params);
-
- */

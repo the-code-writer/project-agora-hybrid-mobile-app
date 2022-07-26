@@ -1,4 +1,4 @@
-import {DF7} from "./df7";
+import {DF7} from "./dovellous";
 import K from "./src/libraries/app/konstants";
 
 /**

@@ -4,232 +4,311 @@ import { InstantMessaging } from "./apps/instant-messaging/InstantMessaging";
 import { LiveStreaming } from "./apps/live-streaming/LiveStreaming";
 import { WhiteBoard } from "./apps/white-board/WhiteBoard";
 
-import K from "../app/konstants";
+import {K, Snippets} from "../app/helpers";
 
-/* Simple JavaScript Inheritance
- * By John Resig https://johnresig.com/
- * MIT Licensed.
- */
-// Inspired by base2 and Prototype
-(function () {
-  let initializing = false, fnTest = /vaida/.test(function () {
-    vaida;
-  }) ? /\b_super\b/ : /.*/;
+import * as ModuleBaseClasses from "../app/module-base-classes";
 
-  // The base Class implementation (does nothing)
-  this.Class = function () {
-  };
+//import RtcEngine from 'react-native-agora';
 
-  // Create a new Class that inherits from this class
-  Class.extend = function (prop) {
-    let _super = this.prototype;
-
-    // Instantiate a base class (but only create the instance,
-    // don't run the init constructor)
-    initializing = true;
-    let prototype = new this();
-    initializing = false;
-
-    // Copy the properties over onto the new prototype
-    for (let name in prop) {
-      // Check if we're overwriting an existing function
-      prototype[name] = typeof prop[name] == "function" &&
-        typeof _super[name] == "function" && fnTest.test(prop[name]) ?
-        (function (name, fn) {
-          return function () {
-            let tmp = this._super;
-
-            // Add a new ._super() method that is the same method
-            // but on the super-class
-            this._super = _super[name];
-
-            // The method only need to be bound temporarily, so we
-            // remove it when we're done executing
-            let ret = fn.apply(this, arguments);
-            this._super = tmp;
-
-            return ret;
-          };
-        })(name, prop[name]) :
-        prop[name];
-    }
-
-    // The dummy class constructor
-    function Class() {
-      // All construction is actually done in the init method
-      if (!initializing && this.init)
-        this.init.apply(this, arguments);
-    }
-
-    // Populate our constructed prototype object
-    Class.prototype = prototype;
-
-    // Enforce the constructor to be what we expect
-    Class.prototype.constructor = Class;
-
-    // And make this class extendable
-    Class.extend = arguments.callee;
-
-    return Class;
-  };
-})();
-
-const AgoraLibrary = Class.extend({
-
-  init: function (events, options) {
-
-    let self = this;
-
-    this.events = events;
-
-    this.modules.params = self;
-
-    this.modules.initModules(this, options);
-
-
-  },
-  modules: (function () {
-
-    let parent = {
-
-      isLoaded: false,
-
-      params: null,
-
-      initModules: (app, options) => {
-
-        parent.voiceCall.init(app, options);
-
-      },
-
-      voiceCall: {
-
-        isReady: false,
-
-        params: {
-          foo: "MODULE_BAR",
-        },
-
-        init: (app, options) => {
-
-          Object.keys(options).map(function (key, index) {
-            parent.voiceCall.params[key] = options[key];
-          });
-
-          console.error("::EVENTS::", parent.params.events, parent.voiceCall.params);
-
-          parent.params.events.OnAppInit({ "INIT_EVENT_DATA": [app, parent.voiceCall.params] });
-
-        },
-
-        helloWorld: async function () {
-
-          return parent.voiceCall.params;
-
-        },
-
-      },
-    };
-
-    return parent;
-
-  })()
-
-});
-
-
-// Parent constructor
-function AgoraEvent(name) {
-  this.name = name;
+interface RtcEngine {
+	create: null
 }
 
-/**
- * Event dispatcher template:
- * param object data
- * return null
- */
-AgoraEvent.prototype.dispatch = function (name, data) {
-
-  // Dispatch the event
-  window.dispatchEvent(new CustomEvent(name, { detail: data }));
-
-};
-
-// Child constructor
-function AgoraLibEvent(name) {
-
-  // Call parent constructor with proper arguments
-  AgoraEvent.call(this, name);
-
+var RtcEngine = {
+	create: (appID) => {
+		//console.warn(":: CREATE RTC ENGINE");
+	}
 }
 
-// Inheritance
-AgoraLibEvent.prototype = Object.create(AgoraEvent.prototype);
-AgoraLibEvent.prototype.constructor = AgoraLibEvent;
+const AgoraLibrary = ModuleBaseClasses.Class.extend({
+	init: function(events, options) {
 
-const AgoraEventItems = K.Events.Modules.Agora;
+		let self = this;
 
-Object.keys(AgoraEventItems).map((key, index) => {
+		this.events = events;
 
-  /**
-   *
-   * @returns {*}
-   * @constructor
-   */
-  AgoraLibEvent.prototype[AgoraEventItems[key]] = (data) => {
+		this.modules.params = self;
 
-    // Call parent method
-    return AgoraEvent.prototype.dispatch.call(this, AgoraEventItems[key], data);
+		this.modules.initModules(this, options);
 
-  };
+	},
+	modules: (function() {
+		let parent = {
 
+			isLoaded: false,
+
+			params: null,
+
+			RTC_ENGINE: RtcEngine,
+
+			APP_ID: null,
+			PRIMARY_CERTIFICATE: null,
+			CHANNELS: null,
+			DEFAULT_CHANNELS: null,
+			TOKENS: null,
+			DEFAULT_TOKENS: null,
+
+			initModules: (app, options) => {
+
+				parent.RTC_ENGINE = RtcEngine;
+
+				parent.APP_ID = options.agora.appId;
+				parent.PRIMARY_CERTIFICATE = options.agora.primaryCertificate;
+				parent.CHANNELS = options.agora.channels;
+				parent.DEFAULT_CHANNELS = options.agora.channels.default;
+				parent.TOKENS = options.agora.tokens;
+				parent.DEFAULT_TOKENS = options.agora.tokens.default;
+
+				parent.RTC_ENGINE.create(parent.APP_ID);
+
+				parent.voiceCall.init(
+					app, options.agora.voiceCallConfig ||
+					null);
+
+				parent.videoCall.init(
+					app, options.agora.videoCallConfig ||
+					null);
+
+				parent.instantMessaging.init(
+					app, options.agora.instantMessagingConfig ||
+					null);
+
+				parent.liveStreaming.init(
+					app, options.agora.liveStreamingConfig ||
+					null);
+
+				parent.whiteBoard.init(
+					app, options.agora.whiteBoardConfig ||
+					null);
+					
+			},
+
+			generateToken: ()=>{
+
+			},
+
+			voiceCall: {
+
+				isReady: false,
+
+        lib: VoiceCall,
+
+				params: {
+					foo: "MODULE_BAR",
+				},
+
+				init: (app, options) => { 
+					
+					Object.keys(options).map(( key, index ) => {
+						parent.voiceCall.params[key] = options[key];
+					});
+
+					parent.params.events[K
+						.Events.Modules
+						.Agora.VoiceCall.ON_APP_INIT
+					]([
+						app,
+						parent
+						.voiceCall
+						.params
+					]);
+
+          parent.voiceCall.start();
+          
+				},
+
+				start: async () => {
+					
+          parent.voiceCall.lib = VoiceCall;
+          parent.voiceCall.isReady = true;
+          
+          return parent.voiceCall;
+
+				},
+			},
+			
+			videoCall: {
+
+				isReady: false,
+
+        lib: VideoCall,
+
+				params: {
+					foo: "MODULE_BAR",
+				},
+
+				init: (app, options) => { 
+					
+					Object.keys(options).map(( key, index ) => {
+						parent.videoCall.params[key] = options[key];
+					});
+
+					parent.params.events[K
+						.Events.Modules
+						.Agora.VideoCall.ON_APP_INIT
+					]([
+						app,
+						parent
+						.videoCall
+						.params
+					]);
+
+          parent.videoCall.start();
+          
+				},
+
+				start: async () => {
+					
+          parent.videoCall.lib = VideoCall;
+          parent.videoCall.isReady = true;
+          
+          return parent.instantMessaging;
+
+				},
+			},
+			
+			instantMessaging: {
+
+				isReady: false,
+
+        lib: InstantMessaging,
+
+				params: {
+					foo: "MODULE_BAR",
+				},
+
+				init: (app, options) => { 
+					
+					Object.keys(options).map(( key, index ) => {
+						parent.instantMessaging.params[key] = options[key];
+					});
+
+					parent.params.events[K
+						.Events.Modules
+						.Agora.InstantMessaging.ON_APP_INIT
+					]([
+						app,
+						parent
+						.instantMessaging
+						.params
+					]);
+
+          parent.instantMessaging.start();
+          
+				},
+
+				start: async () => {
+					
+          parent.instantMessaging.lib = InstantMessaging;
+          parent.instantMessaging.isReady = true;
+          
+          return parent.instantMessaging;
+
+				},
+			},
+			
+			liveStreaming: {
+
+				isReady: false,
+
+        lib: LiveStreaming,
+
+				params: {
+					foo: "MODULE_BAR",
+				},
+
+				init: (app, options) => { 
+					
+					Object.keys(options).map(( key, index ) => {
+						parent.liveStreaming.params[key] = options[key];
+					});
+
+					parent.params.events[K
+						.Events.Modules
+						.Agora.LiveStreaming.ON_APP_INIT
+					]([
+						app,
+						parent
+						.liveStreaming
+						.params
+					]);
+
+          parent.liveStreaming.start();
+          
+				},
+
+				start: async () => {
+					
+          parent.liveStreaming.lib = LiveStreaming;
+          parent.liveStreaming.isReady = true;
+          
+          return parent.liveStreaming;
+
+				},
+			},
+			
+			whiteBoard: {
+				
+				isReady: false,
+
+        lib: WhiteBoard,
+
+				params: {
+					foo: "MODULE_BAR",
+				},
+
+				init: (app, options) => { 
+					
+					Object.keys(options).map(( key, index ) => {
+						parent.whiteBoard.params[key] = options[key];
+					});
+
+					parent.params.events[K
+						.Events.Modules
+						.Agora.WhiteBoard.ON_APP_INIT
+					]([
+						app,
+						parent
+						.whiteBoard
+						.params
+					]);
+
+          parent.whiteBoard.start();
+          
+				},
+
+				start: async () => {
+					
+          parent.whiteBoard.lib = WhiteBoard;
+          parent.whiteBoard.isReady = true;
+          
+          return parent.whiteBoard;
+
+				},
+        
+			},
+			
+		};
+		return parent;
+	})(),
 });
 
+// Agora Module Here
+
+ModuleBaseClasses.DovellousEventDispatcher(K.Events.Modules.Agora);
 
 /**
  *
- * @type {AgoraLibEvent}
+ * @type {ModuleBaseClasses.DovellousLibraryEvent}
  */
-const agoraLibEvent = new AgoraLibEvent("agoraLibEvent");
+const agoraLibEvent = new ModuleBaseClasses.DovellousLibraryEvent(K.Events.Modules.Agora.AgoraLibEvent.NAME);
 
 const Agora = (options) => {
+	/**
+	 * @type {ModuleBaseClasses.DovellousLibrary}
+	 */
+	return new AgoraLibrary(agoraLibEvent, options);
 
-  /**
-   * @type {AgoraLibrary}
-   */
-  return new AgoraLibrary(agoraLibEvent, options);
+};
 
-}
- 
-export Agora;
-
-/*
-
-window.addEventListener("OnAppInit", function (eventParams){
-
-  const agora = eventParams.detail[0];
-
-  const eventData = eventParams.detail[1];
-
-  agora.modules.voiceCall.helloWorld().then(function (res) {
-
-    console.log(":: RES ::", res);
-
-    console.warn(":: EVENT DATA ::", eventData);
-
-    console.log(":: AGORA ::", agora);
-
-    console.warn(":: EVENT DETAIL ::", eventParams.detail);
-
-  });
-
-});
-
-  const params = {
-    a: "A",
-    b: [1, 2, 3, 4, 5]
-  };
-
-  Agora(params);
-
- */
+export default Agora;

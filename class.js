@@ -57,6 +57,9 @@ const K = {
 		},
 		Modules: {
 			Agora: {
+				AgoraLibEvent: {
+					NAME: "agoraLibEvent",
+				},
 				VoiceCall: {
 					ON_APP_INIT: "ModulesAgoraVoiceCallOnAppInit",
 					ON_INCOMING_CALL: "ModulesAgoraVoiceCallOnIncomingCall",
@@ -206,6 +209,65 @@ const K = {
 	};
 })();
 
+// Class Library Events
+
+// Parent constructor
+class DovellousEvent {
+	constructor(name) {
+		this.name = name;
+	}
+	/**
+	 * Event dispatcher template:
+	 * param object data
+	 * return null
+	 */
+	dispatch(name, data) {
+		// Dispatch the event
+		window.dispatchEvent(new CustomEvent(name, {
+			detail: data
+		}));
+	}
+}
+
+
+// Child constructor
+class DovellousLibraryEvent {
+	constructor(name) {
+		// Call parent constructor with proper arguments
+		new DovellousEvent(this, name);
+	}
+}
+
+// Inheritance
+DovellousLibraryEvent.prototype = Object.create(DovellousEvent.prototype);
+
+function DovellousEventDispatcher(DovellousEventItems){
+
+	Object.keys(DovellousEventItems).map((objKey, objIndex) => {
+
+		Object.keys(DovellousEventItems[objKey]).map((key, index) => {
+			/**
+			 *
+			 * @returns {*}
+			 * @constructor
+			 */
+			DovellousLibraryEvent.prototype[DovellousEventItems[objKey][key]] = (data, f7) => {
+
+				if(f7){
+
+					f7.emit(DovellousEventItems[objKey][key], data);
+
+				}
+				
+				// Call parent method
+				return DovellousEvent.prototype.dispatch.call(this, DovellousEventItems[objKey][key], data);
+			};
+
+		});
+
+	});
+
+}
 
 let formatPhoneNumber = (str, styleNumber) => {
 	//Filter only numbers from the input
