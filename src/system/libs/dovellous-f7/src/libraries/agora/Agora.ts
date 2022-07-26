@@ -1,29 +1,75 @@
+
+import {K, Snippets} from "../app/helpers";
+import * as ModuleBaseClasses from "../app/module-base-classes";
+
 import { VoiceCall } from "./apps/voice/VoiceCall";
 import { VideoCall } from "./apps/video/VideoCall";
 import { InstantMessaging } from "./apps/instant-messaging/InstantMessaging";
 import { LiveStreaming } from "./apps/live-streaming/LiveStreaming";
 import { WhiteBoard } from "./apps/white-board/WhiteBoard";
 
-import {K, Snippets} from "../app/helpers";
+import { InstantMessagingConfig } from "./apps/instant-messaging/InstantMessagingConfig";
+import { LiveStreamingConfig } from "./apps/live-streaming/LiveStreamingConfig";
+import { VideoCallConfig } from "./apps/video/VideoCallConfig";
+import { VoiceCallConfig } from "./apps/voice/VoiceCallConfig";
+import { WhiteBoardConfig } from "./apps/white-board/WhiteBoardConfig";
 
-import * as ModuleBaseClasses from "../app/module-base-classes";
+import RtcEngine from 'react-native-agora';
 
-//import RtcEngine from 'react-native-agora';
-
-interface RtcEngine {
-	create: null
+interface AgoraInterface {
+  videoCall: VideoCallConfig,
+  voiceCall: VoiceCallConfig,
+  instantMessaging:InstantMessagingConfig,
+  liveStreaming:LiveStreamingConfig,
+  whiteBoard: WhiteBoardConfig
 }
 
-var RtcEngine = {
-	create: (appID) => {
-		//console.warn(":: CREATE RTC ENGINE");
-	}
+class AgoraConfig implements AgoraInterface{
+
+  videoCall: VideoCallConfig;
+  voiceCall: VoiceCallConfig;
+  instantMessaging:InstantMessagingConfig;
+  liveStreaming:LiveStreamingConfig;
+  whiteBoard: WhiteBoardConfig;
+
+  constructor(
+    videoCall: VideoCallConfig,
+    voiceCall: VoiceCallConfig,
+    instantMessaging:InstantMessagingConfig,
+    liveStreaming:LiveStreamingConfig,
+    whiteBoard: WhiteBoardConfig
+  ) {
+    this.videoCall = videoCall;
+    this.voiceCall = voiceCall;
+    this.instantMessaging = instantMessaging;
+    this.liveStreaming = liveStreaming;    
+    this.whiteBoard = whiteBoard;
+  }
+
 }
 
 const AgoraLibrary = ModuleBaseClasses.Class.extend({
-	init: function(events, options) {
+
+  config: null,
+
+	init: function(
+    events: any, 
+    videoCall: VideoCallConfig | AgoraConfig,
+    voiceCall: VoiceCallConfig,
+    instantMessaging:InstantMessagingConfig,
+    liveStreaming:LiveStreamingConfig,
+    whiteBoard: WhiteBoardConfig 
+  ) {
 
 		let self = this;
+
+    let options: AgoraConfig;
+
+    if (videoCall instanceof AgoraConfig) {
+      options = videoCall;
+    } else {
+      options = new AgoraConfig(voiceCall, videoCall, instantMessaging, liveStreaming, whiteBoard);
+    }
 
 		this.events = events;
 
@@ -37,10 +83,9 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 			isLoaded: false,
 
-			params: null,
+			params: AgoraConfig,
 
 			RTC_ENGINE: RtcEngine,
-
 			APP_ID: null,
 			PRIMARY_CERTIFICATE: null,
 			CHANNELS: null,
@@ -52,34 +97,24 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 				parent.RTC_ENGINE = RtcEngine;
 
-				parent.APP_ID = options.agora.appId;
-				parent.PRIMARY_CERTIFICATE = options.agora.primaryCertificate;
+				parent.APP_ID = options.appId;
+				parent.PRIMARY_CERTIFICATE = options.primaryCertificate;
 				parent.CHANNELS = options.agora.channels;
-				parent.DEFAULT_CHANNELS = options.agora.channels.default;
-				parent.TOKENS = options.agora.tokens;
-				parent.DEFAULT_TOKENS = options.agora.tokens.default;
+				parent.DEFAULT_CHANNELS = options.channels.default;
+				parent.TOKENS = options.tokens;
+				parent.DEFAULT_TOKENS = options.tokens.default;
 
-				parent.RTC_ENGINE.create(parent.APP_ID);
+				parent.RTC_ENGINE.create(options.appId);
 
-				parent.voiceCall.init(
-					app, options.agora.voiceCallConfig ||
-					null);
+				parent.voiceCall.init(app, options.voiceCall);
 
-				parent.videoCall.init(
-					app, options.agora.videoCallConfig ||
-					null);
+				parent.videoCall.init(app, options.videoCall);
 
-				parent.instantMessaging.init(
-					app, options.agora.instantMessagingConfig ||
-					null);
+				parent.instantMessaging.init(app, options.instantMessaging);
 
-				parent.liveStreaming.init(
-					app, options.agora.liveStreamingConfig ||
-					null);
+				parent.liveStreaming.init(app, options.liveStreaming);
 
-				parent.whiteBoard.init(
-					app, options.agora.whiteBoardConfig ||
-					null);
+				parent.whiteBoard.init(app, options.whiteBoard);
 					
 			},
 
@@ -311,4 +346,4 @@ const Agora = (options) => {
 
 };
 
-export default Agora;
+export {Agora, AgoraConfig};

@@ -1,17 +1,23 @@
 // Import Framework7
 // @ts-ignore
+
+import 'dotenv/config'
+
 import Framework7 from 'framework7/lite-bundle';
+import {K, Snippets} from './src/libraries/app/helpers';
 
 import {CapacitorStorage} from './src/libraries/storage/capacitor-js-storage/CapacitorStorage';
 import {JSONDatabaseService} from './src/libraries/storage/json-db-service/JSONDatabaseService';
 import {Config as JSONDatabaseServiceConfig} from './src/libraries/storage/json-db-service/lib/JSONDatabaseServiceConfig';
 
+/* Begin Import Agora Library */
 import { VoiceCallConfig } from './src/libraries/agora/apps/voice/VoiceCallConfig';
 import { InstantMessagingConfig } from './src/libraries/agora/apps/instant-messaging/InstantMessagingConfig';
 import { VideoCallConfig } from './src/libraries/agora/apps/video/VideoCallConfig';
 import { LiveStreamingConfig } from './src/libraries/agora/apps/live-streaming/LiveStreamingConfig';
 import { WhiteBoardConfig } from './src/libraries/agora/apps/white-board/WhiteBoardConfig';
-import Agora from './src/libraries/agora/Agora';
+import {Agora, AgoraConfig} from './src/libraries/agora/Agora';
+/* End Import Agora Library */
 
 import SqliteService from './src/libraries/databases/sqlite-service';
 import Blockchain from './src/libraries/cryptography/blockchain';
@@ -21,8 +27,7 @@ import MimeTypes from './src/libraries/media/mime-types';
 import Base64 from './src/libraries/encodings/base64';
 import AppThemes from './src/libraries/app/themes';
 import AppImages from './src/libraries/app/images';
-import K from './src/libraries/app/konstants';
-import Snippets from './src/libraries/app/snippets';
+
 import {GoogleFirebase} from './src/libraries/firebase/GoogleFirebase';
 import {Vaida} from './src/libraries/vaida/Vaida';
 
@@ -58,25 +63,34 @@ class Dovellous{
 
   }
 
-  constructor(paramsAgora){
+  constructor(agoraConfig: AgoraConfig){
 
     const self = this;
 
-    window.addEventListener(K.Events.Modules.Agora.ON_APP_INIT, function (eventParams){
+    /* Begin Agora Library Init */
 
-      self.Libraries.Agora = eventParams.detail[0];
+    window.addEventListener(K.Events.Modules.Agora.AgoraLibEvent.NAME, function (e){
+
+      self.Libraries.Agora = e.detail[0];
     
-      const eventData = eventParams.detail[1];
+      //const appData = e.detail[1];
     
     });
 
-    this.init(paramsAgora);
+    agoraConfig instanceof AgoraConfig ? this.initAgora(agoraConfig) : null;
+
+    /* End Agora Library Init */
 
   }
 
-  init (paramsAgora) {
+  /**
+	 * Initializes the Agora Library:
+	 * param agoraConfig AgoraConfig - A config file for all agora modules. This follows the correct Agora Config Interface
+	 * return null
+	 */
+  initAgora (agoraConfig: AgoraConfig) {
 
-    Agora(paramsAgora);
+    Agora(agoraConfig);
 
   }
 
