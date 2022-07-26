@@ -4,14 +4,10 @@ import {K} from "../app/helpers";
 import * as ModuleBaseClasses from "../app/module-base-classes";
 
 import { VoiceCallConfig, VoiceCall } from "./apps/voice/VoiceCall";
-import { VideoCallConfig } from "./apps/video/VideoCallConfig";
-import { VideoCall } from "./apps/video/VideoCall";
-import { InstantMessagingConfig } from "./apps/instant-messaging/InstantMessagingConfig";
-import { InstantMessaging } from "./apps/instant-messaging/InstantMessaging";
-import { LiveStreamingConfig } from "./apps/live-streaming/LiveStreamingConfig";
-import { LiveStreaming } from "./apps/live-streaming/LiveStreaming";
-import { WhiteBoardConfig } from "./apps/white-board/WhiteBoardConfig";
-import { WhiteBoard } from "./apps/white-board/WhiteBoard";
+import { VideoCallConfig, VideoCall } from "./apps/video/VideoCall";
+import { InstantMessagingConfig, InstantMessaging } from "./apps/instant-messaging/InstantMessaging";
+import { LiveStreamingConfig, LiveStreaming } from "./apps/live-streaming/LiveStreaming";
+import { WhiteBoardConfig, WhiteBoard } from "./apps/white-board/WhiteBoard";
 
 interface AgoraInterface {
   videoCall: VideoCallConfig,
