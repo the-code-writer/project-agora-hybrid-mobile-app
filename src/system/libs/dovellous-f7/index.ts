@@ -51,7 +51,17 @@ const DovellousF7Plugin = {
     dovellous: {
       debugger: true,
       modules: {
-        agora: {}
+        agora: { 
+          appId: '',
+          primaryCertificate: '',
+          channels: '',
+          tokens: '',
+          voiceCall: '',
+          videoCall: '',
+          instantMessaging: '',
+          liveStreaming: '',
+          whiteBoard: ''
+        }
       },
     },
   },

@@ -1,3 +1,5 @@
+import Framework7 from 'framework7/lite-bundle';
+
 import RtcEngine from 'react-native-agora';
 
 import {K, ModuleBaseClasses} from "../app/helpers";
@@ -56,7 +58,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
   init: function(
     events: any, 
-    F7: any,
+    F7: Framework7,
     appId: any,
     primaryCertificate: any,
     channels: any,
@@ -97,12 +99,12 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 			RTC_ENGINE: RtcEngine,
 			APP_ID: "",
 			PRIMARY_CERTIFICATE: "",
-			CHANNELS: [],
+			CHANNELS: {},
 			DEFAULT_CHANNEL: "",
-			TOKENS: [],
+			TOKENS: {},
 			DEFAULT_TOKEN: "",
 
-			initModules: async (app: any, F7: any, options: { appId: string; primaryCertificate: string; agora: { channels: never[]; }; channels: { default: string; }; tokens: never[]; voiceCall: any; videoCall: any; instantMessaging: any; liveStreaming: any; whiteBoard: any; }) => {
+			initModules: async (app: any, F7: Framework7, options: { appId: string; primaryCertificate: string; agora: { channels: {}; }; channels: { [x: string]: string; }; tokens: { [x: string]: string; }; voiceCall: { moduleName: string; }; videoCall: { moduleName: string; }; instantMessaging: { moduleName: string; }; liveStreaming: { moduleName: string; }; whiteBoard: { moduleName: string; }; }) => {
 
         parent.F7 = F7;
 
@@ -140,7 +142,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 			generateDefaultToken: async ()=>{
 
-        let _token;
+        let _token: string = K.Events.Modules.Agora.AgoraDefaults.DEFAULT_TOKEN;
 
         //call ajax and retrieve token
 
@@ -150,7 +152,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 			generateDefaultChannel: async ()=>{
 
-        let _channel;
+        let _channel: string = K.Events.Modules.Agora.AgoraDefaults.DEFAULT_CHANNEL;
 
         //call ajax and retrieve channel
 
@@ -309,7 +311,7 @@ ModuleBaseClasses.DovellousEventDispatcher(K.Events.Modules.Agora);
  */
 const agoraLibEvent: ModuleBaseClasses.DovellousLibraryEvent = new ModuleBaseClasses.DovellousLibraryEvent(K.Events.Modules.Agora.AgoraLibEvent.NAME);
 
-const Agora = (F7: any, options: AgoraConfig) => {
+const Agora = (F7: Framework7, options: AgoraConfig) => {
 	/**
 	 * @type {ModuleBaseClasses.DovellousLibrary}
 	 */
