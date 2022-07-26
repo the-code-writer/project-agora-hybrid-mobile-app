@@ -1,3 +1,6 @@
+import RtcEngine from 'react-native-agora';
+
+
 const AgoraLibrary = Class.extend({
 	init: function(events, options) {
 		let self = this;
@@ -10,13 +13,30 @@ const AgoraLibrary = Class.extend({
 	},
 	modules: (function() {
 		let parent = {
+
 			isLoaded: false,
 
 			params: null,
 
+			APP_ID: null,
+			PRIMARY_CERTIFICATE: null,
+			CHANNELS: null,
+			DEFAULT_CHANNELS: null,
+			TOKENS: null,
+			DEFAULT_TOKENS: null,
+
 			initModules: (app, options) => {
 
 				console.warn("::INIT MODULES::", app, options);
+
+				parent.APP_ID = options.agora.appId;
+				parent.PRIMARY_CERTIFICATE = options.agora.primaryCertificate;
+				parent.CHANNELS = options.agora.channels;
+				parent.DEFAULT_CHANNELS = options.agora.channels.default;
+				parent.TOKENS = options.agora.tokens;
+				parent.DEFAULT_TOKENS = options.agora.tokens.default;
+
+				RtcEngine.create(parent.APP_ID);
 
 				parent.voiceCall.init(
 					app, options.agora.voiceCallConfig ||
@@ -38,6 +58,12 @@ const AgoraLibrary = Class.extend({
 					app, options.agora.whiteBoardConfig ||
 					null);
 					
+			},
+
+			generateToken: ()=>{
+
+
+
 			},
 
 			voiceCall: {
@@ -271,7 +297,7 @@ const AgoraLibrary = Class.extend({
 });
 
 // Parent constructor
-function AgoraEvent(name) {
+function DovellousEvent(name) {
 	this.name = name;
 }
 
@@ -280,7 +306,7 @@ function AgoraEvent(name) {
  * param object data
  * return null
  */
-AgoraEvent.prototype.dispatch = function(name, data) {
+DovellousEvent.prototype.dispatch = function(name, data) {
 	// Dispatch the event
 	window.dispatchEvent(new CustomEvent(name, {
 		detail: data
@@ -288,30 +314,35 @@ AgoraEvent.prototype.dispatch = function(name, data) {
 };
 
 // Child constructor
-function AgoraLibEvent(name) {
+function DovellousLibraryEvent(name) {
 	// Call parent constructor with proper arguments
-	AgoraEvent.call(this, name);
+	DovellousEvent.call(this, name);
 }
 
 // Inheritance
-AgoraLibEvent.prototype = Object.create(AgoraEvent.prototype);
-AgoraLibEvent.prototype.constructor = AgoraLibEvent;
+DovellousLibraryEvent.prototype = Object.create(DovellousEvent.prototype);
+DovellousLibraryEvent.prototype.constructor = DovellousLibraryEvent;
 
-const AgoraEventItems = K.Events.Modules.Agora;
+const DovellousEventItems = K.Events.Modules.Agora;
 
-Object.keys(AgoraEventItems).map((objKey, objIndex) => {
+Object.keys(DovellousEventItems).map((objKey, objIndex) => {
 
-	Object.keys(AgoraEventItems[objKey]).map((key, index) => {
+	Object.keys(DovellousEventItems[objKey]).map((key, index) => {
 		/**
 		 *
 		 * @returns {*}
 		 * @constructor
 		 */
-		AgoraLibEvent.prototype[AgoraEventItems[objKey][key]] = (
-			data) => {
+		DovellousLibraryEvent.prototype[DovellousEventItems[objKey][key]] = (data, f7) => {
+
+			if(f7){
+
+				f7.emit(DovellousEventItems[objKey][key], data);
+
+			}
+			
 			// Call parent method
-			return AgoraEvent.prototype.dispatch.call(this,
-				AgoraEventItems[objKey][key], data);
+			return DovellousEvent.prototype.dispatch.call(this, DovellousEventItems[objKey][key], data);
 		};
 
 	});
@@ -320,13 +351,13 @@ Object.keys(AgoraEventItems).map((objKey, objIndex) => {
 
 /**
  *
- * @type {AgoraLibEvent}
+ * @type {DovellousLibraryEvent}
  */
-const agoraLibEvent = new AgoraLibEvent("agoraLibEvent");
+const agoraLibEvent = new DovellousLibraryEvent("agoraLibEvent");
 
 const Agora = (options) => {
 	/**
-	 * @type {AgoraLibrary}
+	 * @type {DovellousLibrary}
 	 */
 	return new AgoraLibrary(agoraLibEvent, options);
 };
