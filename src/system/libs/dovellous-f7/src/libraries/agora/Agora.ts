@@ -1,7 +1,6 @@
 import RtcEngine from 'react-native-agora';
 
-import {K} from "../app/helpers";
-import * as ModuleBaseClasses from "../app/module-base-classes";
+import {K, ModuleBaseClasses} from "../app/helpers";
 
 import { VoiceCallConfig, VoiceCall } from "./apps/voice/VoiceCall";
 import { VideoCallConfig, VideoCall } from "./apps/video/VideoCall";
