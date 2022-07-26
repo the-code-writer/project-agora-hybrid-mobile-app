@@ -25,12 +25,12 @@ interface AgoraInterface {
 }
 
 class AgoraConfig implements AgoraInterface{
-
   videoCall: VideoCallConfig;
   voiceCall: VoiceCallConfig;
   instantMessaging:InstantMessagingConfig;
   liveStreaming:LiveStreamingConfig;
   whiteBoard: WhiteBoardConfig;
+  static events: any;
 
   constructor(
     videoCall: VideoCallConfig,
@@ -115,6 +115,14 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 				parent.liveStreaming.init(app, options.liveStreaming);
 
 				parent.whiteBoard.init(app, options.whiteBoard);
+
+        parent.params.events[K
+          .Events.Modules
+          .Agora.AgoraLibEvent.MODULE_LOADED
+        ]({
+          agoraApp: app,
+          agoraModule: parent
+        });
 					
 			},
 
