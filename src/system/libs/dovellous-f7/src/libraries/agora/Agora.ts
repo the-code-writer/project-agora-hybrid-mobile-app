@@ -54,9 +54,7 @@ class AgoraConfig implements AgoraInterface{
 
 const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
-  config: null,
-
-	init: function(
+  init: function(
     events: any, 
     F7: any,
     appId: any,
