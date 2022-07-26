@@ -1,19 +1,22 @@
 import RtcEngine from 'react-native-agora';
 
-import {K, Snippets} from "../app/helpers";
+import {K} from "../app/helpers";
 import * as ModuleBaseClasses from "../app/module-base-classes";
 
+import { VoiceCallConfig } from "./apps/voice/VoiceCallConfig";
 import { VoiceCall } from "./apps/voice/VoiceCall";
+import { VideoCallConfig } from "./apps/video/VideoCallConfig";
 import { VideoCall } from "./apps/video/VideoCall";
+import { InstantMessagingConfig } from "./apps/instant-messaging/InstantMessagingConfig";
 import { InstantMessaging } from "./apps/instant-messaging/InstantMessaging";
+import { LiveStreamingConfig } from "./apps/live-streaming/LiveStreamingConfig";
 import { LiveStreaming } from "./apps/live-streaming/LiveStreaming";
+import { WhiteBoardConfig } from "./apps/white-board/WhiteBoardConfig";
 import { WhiteBoard } from "./apps/white-board/WhiteBoard";
 
-import { InstantMessagingConfig } from "./apps/instant-messaging/InstantMessagingConfig";
-import { LiveStreamingConfig } from "./apps/live-streaming/LiveStreamingConfig";
-import { VideoCallConfig } from "./apps/video/VideoCallConfig";
-import { VoiceCallConfig } from "./apps/voice/VoiceCallConfig";
-import { WhiteBoardConfig } from "./apps/white-board/WhiteBoardConfig";
+
+
+
 
 interface AgoraInterface {
   videoCall: VideoCallConfig,
