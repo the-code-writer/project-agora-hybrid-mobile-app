@@ -63,7 +63,7 @@ class Dovellous{
 
   }
 
-  constructor(agoraConfig: AgoraConfig){
+  constructor(F7: any, agoraConfig: AgoraConfig){
 
     const self = this;
 
@@ -77,7 +77,7 @@ class Dovellous{
     
     });
 
-    agoraConfig instanceof AgoraConfig ? this.initAgora(agoraConfig) : null;
+    agoraConfig instanceof AgoraConfig ? this.initAgora(F7, agoraConfig) : null;
 
     /* End Agora Library Init */
 
@@ -85,15 +85,16 @@ class Dovellous{
 
   /**
 	 * Initializes the Agora Library:
+   * May require these params appId, primaryCertificate, channels, tokens, voiceCall, videoCall, instantMessaging, liveStreaming, whiteBoard
 	 * param agoraConfig AgoraConfig - A config file for all agora modules. This follows the correct Agora Config Interface
 	 * return null
 	 */
-  initAgora (agoraConfig: AgoraConfig) {
+  initAgora (F7: any, agoraConfig: AgoraConfig) {
 
-    Agora(agoraConfig);
+    Agora(F7, agoraConfig);
 
   }
 
 }
 
-export default {Dovellous, K, Snippets};
+export {Dovellous, K, Snippets};

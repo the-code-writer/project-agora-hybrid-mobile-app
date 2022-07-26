@@ -3,8 +3,7 @@ import RtcEngine from 'react-native-agora';
 import {K} from "../app/helpers";
 import * as ModuleBaseClasses from "../app/module-base-classes";
 
-import { VoiceCallConfig } from "./apps/voice/VoiceCallConfig";
-import { VoiceCall } from "./apps/voice/VoiceCall";
+import { VoiceCallConfig, VoiceCall } from "./apps/voice/VoiceCall";
 import { VideoCallConfig } from "./apps/video/VideoCallConfig";
 import { VideoCall } from "./apps/video/VideoCall";
 import { InstantMessagingConfig } from "./apps/instant-messaging/InstantMessagingConfig";
@@ -13,10 +12,6 @@ import { LiveStreamingConfig } from "./apps/live-streaming/LiveStreamingConfig";
 import { LiveStreaming } from "./apps/live-streaming/LiveStreaming";
 import { WhiteBoardConfig } from "./apps/white-board/WhiteBoardConfig";
 import { WhiteBoard } from "./apps/white-board/WhiteBoard";
-
-
-
-
 
 interface AgoraInterface {
   videoCall: VideoCallConfig,
@@ -68,6 +63,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 	init: function(
     events: any, 
+    F7: any,
     appId: any,
     primaryCertificate: any,
     channels: any,
@@ -93,7 +89,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 		this.modules.params = self;
 
-		this.modules.initModules(this, options);
+		this.modules.initModules(this, F7, options);
 
 	},
 	modules: (function() {
@@ -103,6 +99,8 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 			params: AgoraConfig,
 
+      F7: "",
+
 			RTC_ENGINE: RtcEngine,
 			APP_ID: "",
 			PRIMARY_CERTIFICATE: "",
@@ -111,7 +109,9 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 			TOKENS: [],
 			DEFAULT_TOKEN: "",
 
-			initModules: async (app: any, options: { appId: string; primaryCertificate: string; agora: { channels: never[]; }; channels: { default: string; }; tokens: never[]; voiceCall: any; videoCall: any; instantMessaging: any; liveStreaming: any; whiteBoard: any; }) => {
+			initModules: async (app: any, F7: any, options: { appId: string; primaryCertificate: string; agora: { channels: never[]; }; channels: { default: string; }; tokens: never[]; voiceCall: any; videoCall: any; instantMessaging: any; liveStreaming: any; whiteBoard: any; }) => {
+
+        parent.F7 = F7;
 
 				parent.RTC_ENGINE = RtcEngine;
 
@@ -123,6 +123,10 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 				parent.DEFAULT_TOKEN = options.tokens["default"];
 
 				parent.RTC_ENGINE.create(options.appId);
+
+        await parent.generateDefaultToken();
+
+        await parent.generateDefaultChannel();
 
 				await parent.voiceCall.init(app, options.voiceCall);
 
@@ -141,7 +145,23 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 			},
 
-			generateToken: ()=>{
+			generateDefaultToken: async ()=>{
+
+        let _token;
+
+        //call ajax and retrieve token
+
+        parent.DEFAULT_TOKEN = _token;
+
+			},
+
+			generateDefaultChannel: async ()=>{
+
+        let _channel;
+
+        //call ajax and retrieve channel
+
+        parent.DEFAULT_CHANNEL = _channel;
 
 			},
 
@@ -159,7 +179,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.voiceCall.params = options;
 
-          parent.voiceCall.lib = VoiceCall;
+          parent.voiceCall.lib = new VoiceCall(parent.params.events, parent.F7, options);;
           parent.voiceCall.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.VoiceCall.ON_APP_INIT]([
@@ -186,7 +206,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.videoCall.params = options;
 
-          parent.videoCall.lib = VideoCall;
+          parent.videoCall.lib = new VideoCall(parent.params.events, options);;
           parent.videoCall.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.VideoCall.ON_APP_INIT]([
@@ -213,7 +233,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.instantMessaging.params = options;
 
-          parent.instantMessaging.lib = InstantMessaging;
+          parent.instantMessaging.lib = new InstantMessaging(parent.params.events, options);;
           parent.instantMessaging.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.InstantMessaging.ON_APP_INIT]([
@@ -240,7 +260,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.liveStreaming.params = options;
 
-          parent.liveStreaming.lib = LiveStreaming;
+          parent.liveStreaming.lib = new LiveStreaming(parent.params.events, options);;
           parent.liveStreaming.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.LiveStreaming.ON_APP_INIT]([
@@ -267,7 +287,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.whiteBoard.params = options;
 
-          parent.whiteBoard.lib = WhiteBoard;
+          parent.whiteBoard.lib = new WhiteBoard(parent.params.events, options);
           parent.whiteBoard.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.WhiteBoard.ON_APP_INIT]([
@@ -296,11 +316,11 @@ ModuleBaseClasses.DovellousEventDispatcher(K.Events.Modules.Agora);
  */
 const agoraLibEvent: ModuleBaseClasses.DovellousLibraryEvent = new ModuleBaseClasses.DovellousLibraryEvent(K.Events.Modules.Agora.AgoraLibEvent.NAME);
 
-const Agora = (options: AgoraConfig) => {
+const Agora = (F7: any, options: AgoraConfig) => {
 	/**
 	 * @type {ModuleBaseClasses.DovellousLibrary}
 	 */
-	return new AgoraLibrary(agoraLibEvent, options);
+	return new AgoraLibrary(agoraLibEvent, F7, options);
 
 };
 

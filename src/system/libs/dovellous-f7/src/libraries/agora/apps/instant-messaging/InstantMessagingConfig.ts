@@ -1,10 +1,10 @@
 export interface InstantMessagingConfig {
-  database: string;
+  defaultChannel: string;
 }
 
 export class Config implements InstantMessagingConfig {
-  database: string;
-  constructor(database: string = 'firebase') {
-    this.database = database;
+  defaultChannel: string;
+  constructor(defaultChannel: string = 'CHTXT0100') {
+    this.defaultChannel = defaultChannel;
   }
 }

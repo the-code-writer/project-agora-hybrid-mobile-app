@@ -1,10 +1,10 @@
 export interface LiveStreamingConfig {
-  database: string;
+  defaultChannel: string;
 }
 
 export class Config implements LiveStreamingConfig {
-  database: string;
-  constructor(database: string = 'firebase') {
-    this.database = database;
+  defaultChannel: string;
+  constructor(defaultChannel: string = 'CHLVE0100') {
+    this.defaultChannel = defaultChannel;
   }
 }

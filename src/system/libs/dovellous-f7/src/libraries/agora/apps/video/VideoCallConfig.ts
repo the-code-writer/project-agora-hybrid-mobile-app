@@ -1,10 +1,10 @@
 export interface VideoCallConfig {
-  database: string;
+  defaultChannel: string;
 }
 
 export class Config implements VideoCallConfig {
-  database: string;
-  constructor(database: string = 'firebase') {
-    this.database = database;
+  defaultChannel: string;
+  constructor(defaultChannel: string = 'CHVID0100') {
+    this.defaultChannel = defaultChannel;
   }
 }

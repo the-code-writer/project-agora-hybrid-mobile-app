@@ -1,10 +1,10 @@
 export interface VoiceCallConfig {
-  database: string;
+  defaultChannel: string;
 }
 
 export class Config implements VoiceCallConfig {
-  database: string;
-  constructor(database: string = 'firebase') {
-    this.database = database;
+  defaultChannel: string;
+  constructor(defaultChannel: string = 'CHAUD0100') {
+    this.defaultChannel = defaultChannel;
   }
 }

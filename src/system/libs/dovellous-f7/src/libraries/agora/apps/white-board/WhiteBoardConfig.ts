@@ -1,10 +1,10 @@
 export interface WhiteBoardConfig {
-  database: string;
+  defaultChannel: string;
 }
 
 export class Config implements WhiteBoardConfig {
-  database: string;
-  constructor(database: string = 'firebase') {
-    this.database = database;
+  defaultChannel: string;
+  constructor(defaultChannel: string = 'CHCLB0100') {
+    this.defaultChannel = defaultChannel;
   }
 }

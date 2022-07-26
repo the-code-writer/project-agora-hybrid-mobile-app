@@ -1,5 +1,5 @@
-import {DF7} from "./dovellous";
-import K from "./src/libraries/app/konstants";
+import { Dovellous } from "./dovellous";
+import { K, Snippets } from "./src/libraries/app/helpers";
 
 /**
  * Dovellous F7 Plugin for Framework7 1.0.0
@@ -13,11 +13,9 @@ import K from "./src/libraries/app/konstants";
  * Released on: July 29, 2022
  */
 
-// eslint-disable-next-line
-let debugEnabled = true;
 const DovellousF7Plugin = {
-    // Module Name
-  name: 'demo-module',
+  // Module Name
+  name: "demo-module",
   /* Install callback
   It will be executed right after component is installed
   Context of this callback points to Class where it was installed
@@ -31,18 +29,20 @@ const DovellousF7Plugin = {
   create() {
     var app = this;
     // extend app methods with debugger methods when app instance just created
+
+    const dovellousLibs = new Dovellous(app, app.params.dovellous.modules);
+
     app.dovellous = {
-      K: K,
-      libs: new DF7(app.params.dovellous.modules),
+      k: K,
+      snippets: Snippets,
+      libs: dovellousLibs,
       enableDebug: function () {
-        debugEnabled = true;
         app.params.dovellous.debugger = true;
       },
       disableDebug: function () {
-        debugEnabled = false;
         app.params.dovellous.debugger = false;
       },
-    }
+    };
   },
   /*
   Object with default class/plugin parameters
@@ -51,86 +51,79 @@ const DovellousF7Plugin = {
     dovellous: {
       debugger: true,
       modules: {
-        agora: {
-
-        },
-        jsonDatabaseService: {
-
-        }
-        
-      }
-    }
+        agora: {}
+      },
+    },
   },
   /* proto object extends Class prototype */
   proto: {
     demoDF7() {
-      return 'demo-module-proto-method';
+      return "demo-module-proto-method";
     },
-    demoStaticDF7: 'demo-module-proto-static',
+    demoStaticDF7: "demo-module-proto-static",
   },
   // Extend Class with static props and methods, e.g. Class.myMethod
   static: {
     demoSTATICF7() {
-      return 'demo-module-class-method';
+      return "demo-module-class-method";
     },
-    demoStaticSTATICF7: 'demo-module-class-static',
+    demoStaticSTATICF7: "demo-module-class-static",
   },
   /* Initialized instance Props & Methods */
   instance: {
     demoPropF7: true,
     demoMethodF7() {
-      return 'demo-method';
+      return "demo-method";
     },
   },
   /* Event handlers */
   on: {
     demoEventF7(a, b) {
-      console.log('demo-event', a, b);
+      console.log("demo-event", a, b);
     },
     init: function () {
       var app = this;
-      if (app.params.DF7.debugger) debugEnabled = true;
-      if(app.params.dovellous.debugger) console.log('app init');
+      if (app.params.dovellous.debugger) console.log("app init");
     },
     pageBeforeIn: function (page) {
       const $ = page.app.$;
       const app = page.app;
-      if(app.params.dovellous.debugger) console.log('pageBeforeIn', page);
+      if (app.params.dovellous.debugger) console.log("pageBeforeIn", page);
     },
     pageAfterIn: function (page) {
       const $ = page.app.$;
       const app = page.app;
-      if(app.params.dovellous.debugger) console.log('pageAfterIn', page);
+      if (app.params.dovellous.debugger) console.log("pageAfterIn", page);
     },
     pageBeforeOut: function (page) {
       const $ = page.app.$;
       const app = page.app;
-      if(app.params.dovellous.debugger) console.log('pageBeforeOut', page);
+      if (app.params.dovellous.debugger) console.log("pageBeforeOut", page);
     },
     pageAfterOut: function (page) {
       const $ = page.app.$;
       const app = page.app;
-      if(app.params.dovellous.debugger) console.log('pageAfterOut', page);
+      if (app.params.dovellous.debugger) console.log("pageAfterOut", page);
     },
     pageInit: function (page) {
       const $ = page.app.$;
       const app = page.app;
-      if(app.params.dovellous.debugger) console.log('pageInit', page);
+      if (app.params.dovellous.debugger) console.log("pageInit", page);
     },
     pageBeforeRemove: function (page) {
       const $ = page.app.$;
       const app = page.app;
-      if(app.params.dovellous.debugger) console.log('pageBeforeRemove', page);
+      if (app.params.dovellous.debugger) console.log("pageBeforeRemove", page);
     },
   },
   /* Handle clicks */
   clicks: {
     // prop name means CSS selector of element to add click handler
-    'p': (_$clickedEl: any, data: any): void => {
+    p: (_$clickedEl: any, data: any): void => {
       // $clickedEl: Dom7 instance of clicked element
       // data: element data set (data- attributes)
     },
-  }
+  },
 };
 
 export { DovellousF7Plugin as default };
