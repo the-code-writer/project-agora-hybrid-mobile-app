@@ -169,7 +169,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 				isReady: false,
 
-        lib: VoiceCall,
+        lib: {},
 
 				params: {
 					moduleName: "VoiceCall",
@@ -179,7 +179,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.voiceCall.params = options;
 
-          parent.voiceCall.lib = new VoiceCall(parent.params.events, parent.F7, options);;
+          parent.voiceCall.lib = new VoiceCall(parent.params.events, parent.F7, options);
           parent.voiceCall.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.VoiceCall.ON_APP_INIT]([
@@ -196,7 +196,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 				isReady: false,
 
-        lib: VideoCall,
+        lib: {},
 
 				params: {
 					moduleName: "VideoCall",
@@ -206,7 +206,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.videoCall.params = options;
 
-          parent.videoCall.lib = new VideoCall(parent.params.events, options);;
+          parent.videoCall.lib = new VideoCall(parent.params.events, parent.F7, options);
           parent.videoCall.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.VideoCall.ON_APP_INIT]([
@@ -223,7 +223,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 				isReady: false,
 
-        lib: InstantMessaging,
+        lib: {},
 
 				params: {
 					moduleName: "InstantMessaging",
@@ -233,7 +233,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.instantMessaging.params = options;
 
-          parent.instantMessaging.lib = new InstantMessaging(parent.params.events, options);;
+          parent.instantMessaging.lib = new InstantMessaging(parent.params.events, parent.F7, options);
           parent.instantMessaging.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.InstantMessaging.ON_APP_INIT]([
@@ -250,7 +250,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 
 				isReady: false,
 
-        lib: LiveStreaming,
+        lib: {},
 
 				params: {
 					moduleName: "LiveStreaming",
@@ -260,7 +260,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.liveStreaming.params = options;
 
-          parent.liveStreaming.lib = new LiveStreaming(parent.params.events, options);;
+          parent.liveStreaming.lib = new LiveStreaming(parent.params.events, parent.F7, options);
           parent.liveStreaming.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.LiveStreaming.ON_APP_INIT]([
@@ -277,7 +277,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 				
 				isReady: false,
 
-        lib: WhiteBoard,
+        lib: {},
 
 				params: {
 					moduleName: "WhiteBoard",
@@ -287,7 +287,7 @@ const AgoraLibrary = ModuleBaseClasses.Class.extend({
 					
 					parent.whiteBoard.params = options;
 
-          parent.whiteBoard.lib = new WhiteBoard(parent.params.events, options);
+          parent.whiteBoard.lib = new WhiteBoard(parent.params.events, parent.F7, options);
           parent.whiteBoard.isReady = true;
           
 					parent.params.events[K.Events.Modules.Agora.WhiteBoard.ON_APP_INIT]([
