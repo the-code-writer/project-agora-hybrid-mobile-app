@@ -57,6 +57,7 @@
     "crypto-js": "^4.1.1",
     "dom7": "^4.0.4",
     "dotenv": "^16.0.1",
+    "firebase": "^9.9.1",
     "framework7": "^7.0.7",
     "framework7-icons": "^5.0.5",
     "framework7-plugin-feeds": "^3.0.0",

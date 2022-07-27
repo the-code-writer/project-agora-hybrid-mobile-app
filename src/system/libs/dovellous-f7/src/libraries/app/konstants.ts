@@ -56,6 +56,48 @@ const K = {
 			DEVICE_THEME_CHANGED: "event-app-device-ready",
 		},
 		Modules: {
+			Firebase: {
+				FirebaseLibEvent: {
+					MODULE_LOADED: "ModulesFirebaseLoaded"
+				},
+				Auth: {
+					ON_APP_INIT: "ModulesFirebaseAuthOnAppInit",
+					USER_LOGGED_IN: "ModulesFirebaseAuthUserLoggedIn",
+					USER_LOGGED_OUT: "ModulesFirebaseAuthUserLoggedOut",
+					USER_STATE_CHANGED: "ModulesFirebaseAuthUserStateChanged",
+				},
+				CloudMessaging: {
+					ON_APP_INIT: "ModulesFirebaseMessagingOnAppInit",
+					LOCAL_NOTIFICATION_RECEIVED: "ModulesFirebaseMessagingLocalNotificationReceived",
+					PUSH_NOTIFICATION_RECEIVED: "ModulesFirebaseMessagingPushNotificationReceived",
+					LOCAL_NOTIFICATION_TAPPED: "ModulesFirebaseMessagingLocalNotificationTapped",
+					PUSH_NOTIFICATION_TAPPED: "ModulesFirebaseMessagingPushNotificationTapped",
+
+				},
+				RealtimeDatabase: {
+					ON_APP_INIT: "ModulesFirebaseRealtimeDatabaseOnAppInit",
+					CHILD_CREATED: "ModulesFirebaseRealtimeDatabaseChildCreated",
+					CHILD_READ: "ModulesFirebaseRealtimeDatabaseChildRead",
+					CHILD_UPDATED: "ModulesFirebaseRealtimeDatabaseChildUpdated",
+					CHILD_DELETED: "ModulesFirebaseRealtimeDatabaseChildDeleted",
+				},
+				Firestore: {
+					ON_APP_INIT: "ModulesFirebaseFirestoreOnAppInit",
+					COLLECTION_CREATED: "ModulesFirebaseFirestoreCollectionCreated",
+					COLLECTION_READ: "ModulesFirebaseFirestoreCollectionRead",
+					COLLECTION_UPDATED: "ModulesFirebaseFirestoreCollectionUpdated",
+					COLLECTION_DELETED: "ModulesFirebaseFirestoreCollectionDeleted",
+					DOCUMENT_CREATED: "ModulesFirebaseFirestoreDocumentCreated",
+					DOCUMENT_READ: "ModulesFirebaseFirestoreDocumentRead",
+					DOCUMENT_UPDATED: "ModulesFirebaseFirestoreDocumentUpdated",
+					DOCUMENT_DELETED: "ModulesFirebaseFirestoreDocumentDeleted",
+				},
+				Storage: {
+					ON_APP_INIT: "ModulesFirebaseStorageOnAppInit",
+					ITEM_ADDED: "ModulesFirebaseStorageItemAdded",
+					ITEM_REMOVED: "ModulesFirebaseStorageItemRemoved",
+				},
+			},
 			Agora: {
 				AgoraDefaults: {
 					DEFAULT_TOKEN: "TK1000000000",
