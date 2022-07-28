@@ -18,4 +18,4 @@ export abstract class NestedError extends Error {
   }
 }
 
-export class WhiteBoardError extends NestedError {}
+export class FirebaseAuthError extends NestedError {}
