@@ -5,7 +5,7 @@
     "pwa",
     "web"
   ],
-  "name": "V.A.I.D.A",
+  "name": "Vongai",
   "framework": "react",
   "template": "tabs",
   "bundler": "vite",
@@ -18,7 +18,7 @@
     "fillBars": false
   },
   "customBuild": false,
-  "pkg": "io.dovellous.vaida",
+  "pkg": "vong.ai",
   "capacitor": {
     "platforms": [
       "ios",

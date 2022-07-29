@@ -1,6 +1,6 @@
 {
-  "appId": "io.dovellous.vongai",
-  "appName": "vong.ai",
+  "appId": "vong.ai",
+  "appName": "Vongai",
   "bundledWebRuntime": true,
   "npmClient": "npm",
   "webDir": "www",
@@ -19,6 +19,10 @@
       "splashImmersive": true,
       "layoutName": "launch_screen",
       "useDialog": true
+    },
+    "FirebaseAuthentication": {
+      "skipNativeAuth": false,
+      "providers": ["apple.com", "google.com"]
     }
   },  
   "cordova": {}

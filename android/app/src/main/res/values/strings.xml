@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">vong.ai</string>
-    <string name="title_activity_main">vong.ai</string>
-    <string name="package_name">io.dovellous.vongai</string>
-    <string name="custom_url_scheme">io.dovellous.vongai</string>
-</resources>

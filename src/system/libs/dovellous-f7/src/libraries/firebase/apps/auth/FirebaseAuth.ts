@@ -112,18 +112,18 @@ class FirebaseAuth {
 	 */
 	 async revokeRefreshTokens(uid) {
 		
-		return new Promise((callBackSuccessResolveUser, callBackSuccessTokenValidity, callBackSuccessResolveTokenRevokeTime, callBackErrorReject)=>{
+		return new Promise((callBackSuccessResolve, callBackErrorReject)=>{
 			
 			getAuth()
 				.revokeRefreshTokens(uid)
 				.then(() => {
-					callBackSuccessResolveUser(getAuth().getUser(uid));
+					callBackSuccessResolve(getAuth().getUser(uid));
 				  })
 				  .then((userRecord) => {
-					callBackSuccessTokenValidity(new Date(userRecord.tokensValidAfterTime).getTime() / 1000);
+					callBackSuccessResolve(new Date(userRecord.tokensValidAfterTime).getTime() / 1000);
 				  })
 				  .then((timestamp) => {
-					callBackSuccessResolveTokenRevokeTime(timestamp);
+					callBackSuccessResolve(timestamp);
 				  })
 				  .catch((error) => {
 					callBackErrorReject(error);
@@ -208,22 +208,36 @@ class FirebaseAuth {
 
 		const hashedUserPassword = password;
 
-		const userData = {
+		interface UserDataInterface {
+			email: any,
+			emailVerified: boolean,
+			password: any,
+			displayName: any,
+			disabled: boolean,
+			phoneNumber?: any,
+			photoURL?: any
+		  };
+
+		  const userData:UserDataInterface = {
 			email: email,
 			emailVerified: false,
 			password: hashedUserPassword,
 			displayName: `${firstname} ${lastname}`,
 			disabled: false,
-		  };
+			phoneNumber: null,
+			photoURL: null
+		  } as UserDataInterface;
 
 		if(phoneNumber){
 			userData.phoneNumber = phoneNumber;
+		}else{
+			delete userData.phoneNumber;
 		}
 		
 		if(photo){
 			userData.photoURL = photo;
 		}else{
-			userData.photoURL = photo;
+			delete userData.photoURL;
 		}
 		
 		return new Promise((callBackSuccessResolve, callBackErrorReject)=>{
