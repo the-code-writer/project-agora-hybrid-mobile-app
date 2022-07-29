@@ -105,6 +105,9 @@
     "workbox-cli": "^6.5.4"
   },
   "scripts": {
+    "add-android": "npx cap add android",
+    "add-ios": "npx cap add ios",
+    "gen-icons": "npx cap add ios",
     "rstart": "react-scripts start",
     "rbuild": "react-scripts build",
     "rtest": "react-scripts test --env=jsdom",
