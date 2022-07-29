@@ -107,7 +107,8 @@
   "scripts": {
     "add-android": "npx cap add android",
     "add-ios": "npx cap add ios",
-    "gen-icons": "npx cap add ios",
+    "gen-android-icons": "cordova-res android --skip-config --copy",
+    "gen-ios-icons": "cordova-res ios --skip-config --copy",
     "rstart": "react-scripts start",
     "rbuild": "react-scripts build",
     "rtest": "react-scripts test --env=jsdom",
