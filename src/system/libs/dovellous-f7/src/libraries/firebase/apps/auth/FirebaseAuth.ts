@@ -1,19 +1,304 @@
 
-import Framework7 from 'framework7/bundle';
+import Framework7 from 'framework7/lite-bundle';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { getAuth } from 'firebase-admin/auth';
-import {K, Snippets} from "../../../app/helpers";
-import * as ModuleBaseClasses from "../../../app/module-base-classes";
+import {K, ModuleBaseClasses, Snippets} from "../../../app/helpers";
 import { FirebaseAuthError } from "./FirebaseAuthErrors";
+
+interface UserDataInterface {
+	email: any,
+	emailVerified: boolean,
+	password: any,
+	displayName: any,
+	disabled: boolean,
+	phoneNumber?: any,
+	photoURL?: any
+  };
+
+interface UserEmailPasswordInterface {
+	email: any,
+	password: any
+  };
 
 // Parent constructor
 class FirebaseAuth {
-
+	
   	framework7Component: Framework7;
 	eventsLibrary:ModuleBaseClasses.DovellousLibraryEvent
 
 	constructor(_eventsLibrary: ModuleBaseClasses.DovellousLibraryEvent, _framework7Component:Framework7) {
     	this.framework7Component = _framework7Component;
     	this.eventsLibrary = _eventsLibrary;
+	}
+
+	/**
+	 * Get the user data by passing a user id as a reference
+	 * param uid string - The user id of the user
+	 * return Promise
+	 */
+	 getUserObject(email: any, password: any, firstname: any, lastname: any, photo: any, phoneNumber: any) {
+
+		const hashedUserPassword = this.getUserHashedPassword(password);
+
+		  const userData:UserDataInterface = {
+			email: email,
+			emailVerified: false,
+			password: hashedUserPassword,
+			displayName: `${firstname} ${lastname}`,
+			disabled: false,
+			phoneNumber: null,
+			photoURL: null
+		  } as UserDataInterface;
+
+		if(phoneNumber){
+			userData.phoneNumber = phoneNumber;
+		}else{
+			delete userData.phoneNumber;
+		}
+		
+		if(photo){
+			userData.photoURL = photo;
+		}else{
+			delete userData.photoURL;
+		}
+		
+		return userData;
+
+	}
+
+	/**
+	 * Get the user data by passing a user id as a reference
+	 * param uid string - The user id of the user
+	 * return Promise
+	 */
+	 getUserEmailPasswordObject(email: any, password: any) {
+
+		const hashedUserPassword = this.getUserHashedPassword(password);
+
+		  const userData:UserEmailPasswordInterface = {
+			email: email,
+			password: hashedUserPassword
+		  } as UserEmailPasswordInterface;
+
+		return userData;
+
+	}
+
+	/**
+	 * Get the user data by passing a user id as a reference
+	 * param uid string - The user id of the user
+	 * return Promise
+	 */
+	 getUserHashedPassword(password: any) {
+
+		return Snippets.strings.hash[K.Cryptography.SHA256](password);
+
+	}
+
+	/**
+	 * Get the user data by passing a user id as a reference
+	 * param uid string - The user id of the user
+	 * return Promise
+	 */
+	 async createUser(email: any, password: any, firstname: any, lastname: any, photo: any, phoneNumber: any) {
+
+		const userData:UserDataInterface = this.getUserObject(email, password, firstname, lastname, photo, phoneNumber);
+		
+		return new Promise((callBackSuccessResolve, callBackErrorReject)=>{
+			
+			getAuth()
+				.createUser(userData)
+				.then((userRecord) => {
+				  callBackSuccessResolve(userRecord);
+				})
+				.catch((error) => {
+					callBackErrorReject(error);
+				});
+
+		});
+
+	}
+
+	/**
+	 * Get the user data by passing the id as a reference
+	 * param uid string - The id of the user
+	 * return Promise
+	 */
+	 async createUserWithEmailAndPassword(email: any, password: any) {
+		
+		const userData:UserEmailPasswordInterface = this.getUserEmailPasswordObject(email, password);
+		
+		return new Promise(async (callBackSuccessResolve)=>{
+			
+			const result = await FirebaseAuthentication.createUserWithEmailAndPassword(userData);
+
+			callBackSuccessResolve(result);
+
+		});
+
+	}
+
+	/**
+	 * Get the user data by passing the id as a reference
+	 * param uid string - The id of the user
+	 * return Promise
+	 */
+	 async signInWithEmailAndPassword (email: any, password: any) {
+		
+		const userData:UserEmailPasswordInterface = this.getUserEmailPasswordObject(email, password);
+		
+		return new Promise(async (callBackSuccessResolve)=>{
+			
+			const result = await FirebaseAuthentication.signInWithEmailAndPassword(userData);
+
+			callBackSuccessResolve(result);
+
+		});
+
+	}
+
+	/**
+	 * Get the user data by passing the id as a reference
+	 * param uid string - The id of the user
+	 * return Promise
+	 */
+	 async signInWithCustomToken (token: any) {
+		
+		return new Promise(async (callBackSuccessResolve, callBackSuccessError)=>{
+			
+			const result = await FirebaseAuthentication.signInWithCustomToken(token);
+
+			if(result.hasOwnProperty("user")){
+				callBackSuccessResolve(result.user);
+			}else{
+				callBackSuccessError(result);
+			}
+
+			
+
+		});
+
+	}
+
+	/**
+	 * Get the user data by passing the id as a reference
+	 * param uid string - The id of the user
+	 * return Promise
+	 */
+	 async signInWithFacebook () {
+		
+		return new Promise(async (callBackSuccessResolve, callBackSuccessError)=>{
+			
+			const result = await FirebaseAuthentication.signInWithFacebook();
+
+			if(result.hasOwnProperty("user")){
+				callBackSuccessResolve(result.user);
+			}else{
+				callBackSuccessError(result);
+			}
+
+		});
+
+	}
+	/**
+	 * Get the user data by passing the id as a reference
+	 * param uid string - The id of the user
+	 * return Promise
+	 */
+	 async signInWithGoogle () {
+		
+		return new Promise(async (callBackSuccessResolve, callBackSuccessError)=>{
+			
+			const result = await FirebaseAuthentication.signInWithGoogle();
+
+			if(result.hasOwnProperty("user")){
+				callBackSuccessResolve(result.user);
+			}else{
+				callBackSuccessError(result);
+			}
+
+		});
+
+	}
+	/**
+	 * Get the user data by passing the id as a reference
+	 * param uid string - The id of the user
+	 * return Promise
+	 */
+	 async signInWithTwitter () {
+		
+		return new Promise(async (callBackSuccessResolve, callBackSuccessError)=>{
+			
+			const result = await FirebaseAuthentication.signInWithTwitter();
+
+			if(result.hasOwnProperty("user")){
+				callBackSuccessResolve(result.user);
+			}else{
+				callBackSuccessError(result);
+			}
+
+		});
+
+	}
+	/**
+	 * Get the user data by passing the id as a reference
+	 * param uid string - The id of the user
+	 * return Promise
+	 */
+	 async signInWithMicrosoft () {
+		
+		return new Promise(async (callBackSuccessResolve, callBackSuccessError)=>{
+			
+			const result = await FirebaseAuthentication.signInWithMicrosoft();
+
+			if(result.hasOwnProperty("user")){
+				callBackSuccessResolve(result.user);
+			}else{
+				callBackSuccessError(result);
+			}
+
+		});
+
+	}
+	/**
+	 * Get the user data by passing the id as a reference
+	 * param uid string - The id of the user
+	 * return Promise
+	 */
+	 async signInWithApple () {
+		
+		return new Promise(async (callBackSuccessResolve, callBackSuccessError)=>{
+			
+			const result = await FirebaseAuthentication.signInWithApple();
+
+			if(result.hasOwnProperty("user")){
+				callBackSuccessResolve(result.user);
+			}else{
+				callBackSuccessError(result);
+			}
+
+		});
+
+	}
+	/**
+	 * Get the user data by passing the id as a reference
+	 * param uid string - The id of the user
+	 * return Promise
+	 */
+	 async signInWithGithub() {
+		
+		return new Promise(async (callBackSuccessResolve, callBackSuccessError)=>{
+			
+			const result = await FirebaseAuthentication.signInWithGithub();
+
+			if(result.hasOwnProperty("user")){
+				callBackSuccessResolve(result.user);
+			}else{
+				callBackSuccessError(result);
+			}
+
+		});
+
 	}
 
 	/**
@@ -190,62 +475,6 @@ class FirebaseAuth {
 				.getUsers(params)
 				.then((getUsersResult) => {
 				  callBackSuccessResolve(getUsersResult.users);
-				})
-				.catch((error) => {
-					callBackErrorReject(error);
-				});
-
-		});
-
-	}
-
-	/**
-	 * Get the user data by passing a user id as a reference
-	 * param uid string - The user id of the user
-	 * return Promise
-	 */
-	 async createUser(email, password, firstname, lastname, photo, phoneNumber) {
-
-		const hashedUserPassword = password;
-
-		interface UserDataInterface {
-			email: any,
-			emailVerified: boolean,
-			password: any,
-			displayName: any,
-			disabled: boolean,
-			phoneNumber?: any,
-			photoURL?: any
-		  };
-
-		  const userData:UserDataInterface = {
-			email: email,
-			emailVerified: false,
-			password: hashedUserPassword,
-			displayName: `${firstname} ${lastname}`,
-			disabled: false,
-			phoneNumber: null,
-			photoURL: null
-		  } as UserDataInterface;
-
-		if(phoneNumber){
-			userData.phoneNumber = phoneNumber;
-		}else{
-			delete userData.phoneNumber;
-		}
-		
-		if(photo){
-			userData.photoURL = photo;
-		}else{
-			delete userData.photoURL;
-		}
-		
-		return new Promise((callBackSuccessResolve, callBackErrorReject)=>{
-			
-			getAuth()
-				.createUser(userData)
-				.then((userRecord) => {
-				  callBackSuccessResolve(userRecord);
 				})
 				.catch((error) => {
 					callBackErrorReject(error);

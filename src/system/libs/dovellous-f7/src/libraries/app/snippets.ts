@@ -58,6 +58,34 @@ const Snippets = {
         
         },
 
+        hash: {
+            
+            md5: (str) => {
+                
+                return str;
+            
+            },
+
+            sha1: (str) => {
+                
+                return str;
+            
+            },
+
+            sha128: (str) => {
+                
+                return str;
+            
+            },
+
+            sha256: (str) => {
+                
+                return str;
+            
+            },
+
+        }
+
     },
 
     json: {
